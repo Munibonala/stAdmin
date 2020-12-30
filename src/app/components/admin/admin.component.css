@@ -1,0 +1,63 @@
+*{
+    font-family: "proxy reg", sans-serif !important;
+  }
+.sidebar{
+    width: 100%;
+    height: 100vh;
+}
+
+
+.sidebar .header{
+    padding: 1.2rem;
+    text-align: center;
+}
+.sidebar .header .user-pic{
+    max-width: 10rem;
+    max-height: 8rem;
+}
+
+.active{
+    background-color: #ffffff !important;
+}
+
+.sidebar ul li a{
+    display: block;
+    height: 100%;
+    text-decoration: none;
+    color: #000000;
+    font-weight: 500;
+    width: 90%;
+    margin: auto;
+    line-height: 35px;
+    font-size: 18px;
+    padding: 0.5rem 1.2rem;
+    border-radius: 7px;
+    box-sizing: border-box;
+    transition: .4s;
+}
+.active{
+    background-color: #444242 !important;
+    color: #FFFFFF !important;
+}
+.sidebar ul li:hover a{
+    background-color: #444242;
+    color: #FFFFFF;
+    border-top: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+}
+
+*{
+    font-family: "proxy reg", sans-serif ;
+  }
+
+@media screen and (max-width: 767px){
+    .side{
+        width: 0;
+overflow: auto;
+position: fixed;
+transition: all 0.2s;
+z-index: 102;
+top: 0;
+bottom: 0;
+    }
+}

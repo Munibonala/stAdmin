@@ -1,0 +1,247 @@
+<div class="p-3 shadow">
+    <h4 >Details </h4>
+</div>
+<div class="container mt-3 scroll" style="max-height: 80vh; overflow-y: auto;" *ngIf="rawData && rawData.taskTitle ">
+    <div class="row scroll">
+        <div class="col-md-7 mb-2" style=" border-radius: 12px;">
+            <p class=" text-muted pb-0 mb-0" *ngIf="rawData && rawData.taskTitle"
+                style="color: #030303; font-size: 24px; padding: 10px;">
+                {{rawData.taskTitle}}</p>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <ul class="list-unstyled ">
+                                <li class="d-flex">
+                                    <span>
+                                        <img src="{{image}}" width="70" height="70"  class="rounded-circle  shadow">
+                                    </span>
+                                    <span class=" align-self-center">
+                                        <b>{{rawData.customerName}}</b><br>
+                                        <!-- <small style="font-weight: 500;">{{date | date}}</small> -->
+                                    </span>
+                
+                                </li>
+                                <li class="clear"></li>
+                                <li class="d-flex justify-content-start">
+                                    <span>
+                                        <img src="/assets/worldwide-location.png" width="30">
+                                    </span>
+                                    <span style="line-height: 17px;">
+                                        <b>Location</b><br>
+                                        <small>{{rawData.location}}</small><br>
+                                        <a *ngIf="!rawData.canThisTaskRemote" target="_blank" href="https://maps.google.com/?q={{rawData.loc[0]}},{{rawData.loc[1]}}" class="text-decoration-none f-14 text-red">View in map</a>
+                                    </span>
+                                </li>
+                                <li class="d-flex">
+                                    <span>
+                                        <img src="../../../assets/calendar.png" width="30">
+                                    </span>
+                                    <span style="line-height: 17px !important;">
+                                        <small><b>To be done on</b></small><br>
+                                        <small style="color: #000000;" class="mx-1" *ngFor="let date of rawData.taskDate;">{{date | date}},</small><br>
+                                        <span style="margin: 0 !important;" *ngIf="rawData && rawData.convenientTimings">
+                                            <small *ngFor="let timings of rawData.convenientTimings">{{timings}}, </small>
+                                        </span>
+                                    </span>
+                                </li>
+                                <li class="d-flex" *ngIf="rawData && rawData.attachments && rawData.attachments.length">
+                                    <span>
+                                        <img src="../../../assets/Icon-metro-attachment.png" width="30">
+                                    </span>
+                                    <span>
+                                        <small><b>Attachments</b></small><br>
+                                        <span  class="hover"
+                                            *ngFor="let attachments of rawData.attachments">
+                                            <img src="{{baseUrl+attachments}}" width="30">
+                                        </span>
+                                    </span>
+                                </li>
+                                <li class="d-flex" *ngIf="rawData && rawData.mustHaves && (rawData.mustHaves.length >= 1)">
+                                    <span style="width: 30px;">
+                
+                                    </span>
+                                    <span style="line-height: 15px;">
+                                        <small><b>Must Haves</b></small><br>
+                                        <span style="line-height: 10px;" class="p-0 d-block"
+                                            *ngFor="let must of rawData.mustHaves; let i = index">
+                                            <small>{{must}}</small>
+                                        </span>
+                                    </span>
+                                </li>
+                            </ul>
+                           
+                        </div>
+                        <div class="col-md-4 p-0">
+                            <div class=" text-center">
+                                <div class="card">
+                                    <div class="card-header bg-white border-0 f-18">
+                                        Task Price
+                                    </div>
+                                    <div class="card-body position-relative text-center p-0 mb-2">
+                                        <p class="card-text font-weight-bold" style="font-size: 18px;">
+                                        <span> RM {{rawData.taskTotalBudget}}</span>
+                                        <!-- <span *ngIf="isCouponApplied"> RM {{taskTotal}}</span> -->
+                                    </p>
+                                        <small class="px-3 py-1 mb-2 rounded-pill  f-14 bg-light" [ngStyle]="{'color' : '#c24029'}">{{rawData.serviceCategory}}</small>
+                                    </div>
+                                </div>
+                                <!-- <p class="text-red f-14 mt-3">Payment on hold</p> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-12 p-0 text-muted">
+                            <div class="border p-4" style="border-radius: 12px;">
+                                <h5>Details</h5>
+                                <p class="">
+                                    <small>{{rawData.describeTaskInDetails}}</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="col-md-5 rmv-pad" style="max-height: 75vh;">
+            <div>
+                <div class="card">
+                    <div class="card-header text-center f-18" style="background-color: #f8f8f8;">
+                         StarTasker wallet balance
+                    </div>
+                    <div class="card-body p-0 mt-2">
+                        <div class="text-center mx-1" *ngIf="isCouponApplied" style="border: 1px dashed gray;">
+                            {{rawData.couponCode}} Coupon Applied
+                        </div>
+                        <div class="px-3">
+                            <div class="text-center">Summary</div>
+                            <div class="d-flex justify-content-between" *ngIf="!isCouponApplied">
+                                <span>Task Price</span>
+                                <span >RM {{rawData.taskTotalBudget}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between" *ngIf="isCouponApplied">
+                                <span>Task Price</span>
+                                <span >RM {{taskTotal}}</span>
+                            </div>
+                            <!-- <div class="d-flex justify-content-between">
+                                <span>StarTasker wallet balance</span>
+                                <span>RM 05</span>
+                            </div> -->
+                            <div class="d-flex justify-content-between" *ngIf="rawData && rawData.couponDiscount">
+                                <span>coupon Discount</span>
+                                <span>RM {{rawData.couponDiscount}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Customer Paid</span>
+                                <span >RM {{rawData.taskTotalBudget}}</span>
+                            </div>
+                            <div class="d-flex f-18 justify-content-between font-weight-bold">
+                                <span>Amount To be Paid </span>
+                                <span>RM {{totalAmount}}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="text-center p-2 mt-3">
+                    
+                </div>
+                <!-- <div class="d-block ">
+                    <mat-vertical-stepper labelPosition="bottom"  >
+                        <mat-step label="Paid to startasker &nbsp;" [editable]="false" [completed]="one" state="phone">
+                         
+                        </mat-step>
+                        <mat-step label="Work completed (by provider )" [editable]="false"  [completed]="two">
+                          
+                        </mat-step>
+                        <mat-step label="Work completed (by customer)" [editable]="false" [completed]="three">
+                        
+                        </mat-step>
+                        <mat-step label="Payment release to provider is completed" [editable]="false" [completed]="four">
+                        
+                        </mat-step>
+                        <mat-step label="Payment is done to provider" [editable]="false" [completed]="five">
+                        
+                        </mat-step>
+                      
+                        <ng-template matStepperIcon="phone">
+                            <i class="far fa-money-bill-alt"></i>
+                        </ng-template>
+                        <ng-template matStepperIcon="chat">
+                            <img src="../../../assets/service.svg" width="20">
+                        </ng-template>
+                      </mat-vertical-stepper>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="bg-light p-1 pl-3">
+            Assigned to
+    </div>
+    <div class="row" *ngIf="bookedTaskers && bookedTaskers.length">
+        <div class="col-md-6" *ngFor="let offers of bookedTaskers">
+           <div class="d-flex">
+            <div class="d-block ">
+                <mat-vertical-stepper labelPosition="bottom">
+                    <mat-step label="Paid to startasker &nbsp;" [editable]="false" completed="true" state="phone">
+                     
+                    </mat-step>
+                    <mat-step label="Work completed by provider" [editable]="false" *ngIf="offers.isWithDraw || offers.isWithDrawCustomer"   [completed]="offers.isTaskerCompletedTask || offers.isCustomerCompletedTask"
+                     state="cross">
+                      
+                    </mat-step>
+                    <mat-step label="Work completed by provider" [editable]="false" *ngIf="!offers.isWithDraw && !offers.isWithDrawCustomer"   [completed]="offers.isTaskerCompletedTask || offers.isCustomerCompletedTask">
+                     
+                   </mat-step>
+                    <mat-step label="Work completed by customer" [editable]="false" *ngIf="offers.isWithDraw || offers.isWithDrawCustomer"  [completed]="offers.isCustomerCompletedTask" state="cross">
+                    
+                    </mat-step>
+                    <mat-step label="Work completed by customer" [editable]="false" *ngIf="!offers.isWithDraw && !offers.isWithDrawCustomer"  [completed]="offers.isCustomerCompletedTask" >
+                    
+                    </mat-step>
+                    <mat-step label="Payment is done to provider" [editable]="false" *ngIf="offers.isWithDraw || offers.isWithDrawCustomer"  [completed]="offers.paymentStatusToProviderByAdmin" state="cross">
+                    
+                    </mat-step>
+                    <mat-step label="Payment is done to provider" [editable]="false"  *ngIf="!offers.isWithDraw && !offers.isWithDrawCustomer" [completed]="offers.paymentStatusToProviderByAdmin">
+                    
+                    </mat-step>
+                    <!-- <mat-step label="Payment is done to provider" [editable]="false" completed="{{offers.paymentStatusToProviderByAdmin}}">
+                    
+                    </mat-step> -->
+                  
+                    <!-- Icon overrides. -->
+                    <ng-template matStepperIcon="phone">
+                        <i class="far fa-money-bill-alt"></i>
+                    </ng-template>
+                    <ng-template matStepperIcon="cross">
+                        <img src="../../../assets/criss_cross.png" width="25">
+                    </ng-template>
+                  </mat-vertical-stepper>
+            </div>
+            <ul class="list-unstyled ">
+                <li class="d-flex">
+                    <span class="hover" (click)="showUser(offers.offeredUserID)">
+                        <img src="{{baseUrl+offers.offeredUserProfilePic}}" width="70" height="70"  class="rounded-circle  shadow">
+                    </span>
+                    <span class=" align-self-center">
+                        <b>{{offers.offeredUserName}}</b><br>
+                        <small class="f-14 text-red"><b>Offered Amount</b></small><br>
+                        <small class="f-14">RM {{offers.budget}}</small><br>
+                        <small class="f-14 text-success"><b>Amount to be Paid</b></small><br>
+                        <small class="f-14">RM {{(offers.budget * 0.8).toFixed(2)}}</small><br>
+                        <small class="f-14 text-success font-weight-bold" *ngIf="offers.paymentStatusToProviderByAdmin">
+                            <span class="f-14 font-weight-bold text-dark" style="margin-left: -4px !important;">Payment Status</span>
+                            <br>Completed</small>
+                        <small class="f-14 text-red " *ngIf="offers.isWithDraw"><b>Withdrawn by Provider</b></small>
+                        <small class="f-14 text-red " *ngIf="offers.isWithDrawCustomer"><b>Withdrawn by customer</b></small>
+                        <div *ngIf="offers.isWithDrawCustomer || offers.isWithDraw">
+                            <small class="f-14 text-danger">Reason : </small>
+                            <small class="f-14" *ngIf="offers.withDrawReason"><b> {{offers.withDrawReason}}</b></small>
+                        </div>
+                        <div class="f-14 " style="color: #FA0e0e;" *ngIf="!offers.paymentStatusToProviderByAdmin && !offers.isWithDraw && offers.isCustomerCompletedTask">
+                        <button mat-raised-button class="btn-bg" (click)="releasePayment(offers)"> Release payment</button>
+                        </div>
+                    </span>
+                </li></ul>
+           </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,116 @@
+<div class="container-fluid">
+<div class="row">
+    <div class="col-md-12 bg-light d-flex justify-content-between p-3">
+        <h4 class="align-self-center">All Bookings</h4>
+        <form class="example-form align-self-center" >
+            <div class="form-group has-search">
+              <i class="fa fa-search fa-2x form-control-feedback"></i>
+              <input type="search" class="form-control search-services" (keyup)="applyFilter($event.target.value)"  placeholder="Search by name">
+            </div>
+            
+          </form>
+    </div>
+</div>
+<div class="row p-2 mt-2 bg-light">
+    <form class="form-inline" [formGroup]="filterForm">
+   
+       <div class="input-group">
+         <input type="text" class="form-control bg-white" readonly [value]="taskStatus" placeholder="Sort By" aria-label="Recipient's username" aria-describedby="basic-addon2">
+         <div class="input-group-append bg-white" [matMenuTriggerFor]="menu">
+           <span class="input-group-text" id="basic-addon2">
+             <img src="../../../assets/interface.png" >
+           </span>
+         </div>
+       </div>
+       <div class="input-group ml-2">
+         <input type="text" class="form-control" [maxDate]="maxDate" bsDaterangepicker formControlName="dateRange"
+          placeholder="Select date range" [bsConfig]="{ adaptivePosition: true }"  #drp2="bsDaterangepicker">
+         <div class="input-group-append">
+           <span class="input-group-text hover" id="basic-addon2" (click)="drp2.toggle()">
+               <i class="fas fa-calendar-alt fa-fw"></i>
+           </span>
+         </div>
+       </div>
+
+      
+       <div class="align-self-center ml-3">
+         <button mat-raised-button (click)="getFilteredTask()"  class="btn-bg rounded-pill small">Submit</button>
+       </div>
+    </form>
+       <mat-menu #menu="matMenu" class="mobile-menu" [overlapTrigger]="false">
+         <a mat-menu-item (click)="tasksFilter('All')" [ngClass]="{'text-success': taskStatus == 'All'}"  class="text-decoration-none header-text" >
+             ALL 
+       </a>
+     <a mat-menu-item  class="text-decoration-none header-text" [ngClass]="{'text-success': taskStatus == 'Completed'}" (click)="tasksFilter('Completed')" >
+       Completed 
+   </a>
+   <a mat-menu-item  class="text-decoration-none header-text" [ngClass]="{'text-success': taskStatus == 'Pending'}"  (click)="tasksFilter('Pending')">
+        Pending
+   </a>
+       </mat-menu>
+       
+ </div>
+    <div class="row " >
+        <div *ngIf="filteredData && filteredData.length"  class="col-md-12 p-0 ">
+            <div class="list-group mr-3 pt-1">
+                <cdk-virtual-scroll-viewport itemSize="20" (scrolledIndexChange)='onScrollEnd()' style="overflow-y: scroll;max-height: 75vh; " class="scroll">
+                    <a class="list-group-item hover   list-group-item-action "
+                    *cdkVirtualFor="let jobs of filteredData ; let i = index;" (click)="openDetails(jobs)">
+                    <div class="d-flex  px-2 justify-content-start" style="font-size: 14px; font-weight: 500;">
+                        <div class=" px-3">
+                            <img *ngIf="jobs.customerProfilePic != ''" src="{{baseUrl+jobs.customerProfilePic}}" width="60" height="60" style="border-radius: 50%;">
+                            <img *ngIf="jobs.customerProfilePic == ''" src="{{baseUrl}}/user.png" width="60" height="60" style="border-radius: 50%;">
+                        </div>
+                        <div class=" pl-1 flex-fill">
+                            <div class="my-1 d-flex" style="font-weight: 600;">
+                                <span class="px-2">{{jobs.taskTitle}}</span>
+                                <span style=" flex: 1 1 auto;"></span>
+                                <span class="font-weight-bold text-nowrap small">RM
+                                    {{jobs.taskTotalBudget}}</span>
+                            </div>
+                            <ul class="list-unstyled ">
+                                <li class="d-flex justify-content-start">
+                                    <span>
+                                        <img src="../../../assets/Icon-material-location-on.png"
+                                        class="d-inline-block" width="13">
+                                    </span>
+                                    <span class="text-justify address pl-2" style="font-weight: 500; width: 150px !important;overflow: hidden; text-overflow: ellipsis;white-space: nowrap;">
+                                        <small>{{jobs.location}}</small>
+                                    </span>
+                                </li>
+                                <li class="d-flex">
+                                    <span>
+                                        <img src="../../../assets/calendar.png" width="13">
+                                    </span>
+                                    <span class="m-0 p-0 pl-2" >
+                                        <!-- <small *ngFor="let dates of jobs.taskDate" class="m-0">{{+dates | date}},</small> -->
+                                        <small  class="m-0">{{+jobs.paymentDate | date}},</small>
+                                    </span>
+                                </li>
+                                <li class="d-flex">
+                                    <span>
+                                        <img src="../../../assets/clock.png" width="13">
+                                    </span>
+                                    <span class="pl-2">
+                                        <small *ngIf="jobs.convenientTimings.length == 0 || jobs.convenientTimings.length == 4">Any Time </small>
+                                        <span style="margin: 0 !important;" *ngIf="jobs && jobs.convenientTimings.length && jobs.convenientTimings.length <= 3">
+                                            <small *ngFor="let timings of jobs.convenientTimings">{{timings}}, </small>
+                                        </span>
+                                </span>
+                                <span style="flex: 1 1 auto;"></span>
+                                <span *ngIf="jobs.isTaskCompleted"  style="font-size: 0.8rem !important;font-weight: 600;color: green;">Completed</span>
+                                <span *ngIf="!jobs.isTaskCompleted" style="font-size: 0.8rem !important;font-weight: 600;color:#fa0e0e">Pending</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </a>
+                </cdk-virtual-scroll-viewport>
+                
+            </div>
+        </div>
+        <div *ngIf="filteredData.length == 0" class="col-md-12 p-0 d-flex justify-content-center" style="min-height: 50vh;">
+            <h5 class="align-self-center">{{apiStatus}}</h5>
+        </div>
+    </div>
+</div>

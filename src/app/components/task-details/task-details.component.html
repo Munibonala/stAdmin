@@ -1,0 +1,130 @@
+<div class="p-3 shadow">
+    <h4 >Details </h4>
+</div>
+<div class="container mt-3 scroll" style="max-height: 80vh; overflow-y: auto;" *ngIf="rawData && rawData.postTitle ">
+    <div class="row scroll">
+        <div class="col-md-6 mb-2" style=" border-radius: 12px;">
+            <p class=" text-muted pb-0 mb-0" *ngIf="rawData && rawData.postTitle"
+                style="color: #030303; font-size: 24px; padding: 10px;">
+                {{rawData.postTitle}}</p>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <ul class="list-unstyled ">
+                                <li class="d-flex">
+                                    <span>
+                                        <img src="{{image}}" width="70" height="70"  class="rounded-circle  shadow">
+                                    </span>
+                                    <span class=" align-self-center">
+                                        <b>{{taskUserInfo.firstName}} {{taskUserInfo.lastName}}</b><br>
+                                        <small style="font-weight: 500;">{{date | date}}</small>
+                                    </span>
+                
+                                </li>
+                                <li class="clear"></li>
+                                <li class="d-flex justify-content-start">
+                                    <span>
+                                        <img src="/assets/worldwide-location.png" width="30">
+                                    </span>
+                                    <span style="line-height: 17px;">
+                                        <b>Location</b><br>
+                                        <small *ngIf="rawData.canThisTaskRemote">Remote Task</small>
+                                        <small *ngIf="!rawData.canThisTaskRemote">{{rawData.location}}</small><br>
+                                        <a *ngIf="!rawData.canThisTaskRemote" target="_blank" href="https://maps.google.com/?q={{rawData.loc[0]}},{{rawData.loc[1]}}" class="text-decoration-none f-14 text-red">View in map</a>
+                                    </span>
+                                </li>
+                                <li class="d-flex">
+                                    <span>
+                                        <img src="../../../assets/calendar.png" width="30">
+                                    </span>
+                                    <span style="line-height: 17px !important;">
+                                        <small><b>To be done on</b></small><br>
+                                        <small style="color: #000000;" class="mx-1"
+                                            *ngFor="let date of rawData.taskDate;">{{date | date}},</small><br>
+                                        <span style="margin: 0 !important;" *ngIf="rawData && rawData.convenientTimings">
+                                            <small *ngFor="let timings of rawData.convenientTimings">{{timings}}, </small>
+                                        </span>
+                                    </span>
+                                </li>
+                                <li class="d-flex" *ngIf="rawData && rawData.attachments && rawData.attachments.length">
+                                    <span>
+                                        <img src="../../../assets/Icon-metro-attachment.png" width="30">
+                                    </span>
+                                    <span>
+                                        <small><b>Attachments</b></small><br>
+                                        <span class="hover"
+                                            *ngFor="let attachments of rawData.attachments">
+                                            <img src="{{baseUrl+attachments}}" width="30">
+                                        </span>
+                                    </span>
+                                </li>
+                                <li class="d-flex" *ngIf="rawData && rawData.mustHaves && (rawData.mustHaves.length >= 1)">
+                                    <span style="width: 30px;">
+                
+                                    </span>
+                                    <span style="line-height: 15px;">
+                                        <small><b>Must Haves</b></small><br>
+                                        <span style="line-height: 10px;" class="p-0 d-block"
+                                            *ngFor="let must of rawData.mustHaves; let i = index">
+                                            <small>{{must}}</small>
+                                        </span>
+                                    </span>
+                                </li>
+                            </ul>
+                           
+                        </div>
+                        <div class="col-md-4">
+                            <div class=" text-center">
+                                <div class="card">
+                                    <div class="card-header bg-white border-0 f-18">
+                                        Task Price
+                                    </div>
+                                    <div class="card-body p-0 mb-2">
+                                        <p class="card-text font-weight-bold" style="font-size: 18px;">RM {{rawData.budget.budget}}</p>
+                                        <span class="px-3 py-1 mb-2 rounded-pill bg-light" [ngStyle]="{'color' : getColors(rawData.post_Status)}">{{rawData.post_Status}}</span>
+                                    </div>
+                                </div>
+                                <!-- <p class="text-red f-14 mt-3">Payment on hold</p> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-12 p-0 text-muted">
+                            <div class="border p-4" style="border-radius: 12px;">
+                                <h5>Details</h5>
+                                <p class="">
+                                    <small>{{rawData.describeTaskInDetails}}</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="col-md-6 rmv-pad" style="max-height: 75vh;">
+            <div class="container-fluid">
+                <div class="bg-light p-1 pl-3" *ngIf="assigned && assigned.length">
+                    Assigned to
+            </div>
+            <div class="row" *ngIf="assigned && assigned.length">
+                <div class="col-md-6 p-0" *ngFor="let offer of assigned">
+                    <ul class="list-unstyled " >
+                        <li class="d-flex">
+                            <span>
+                                <img src="{{baseUrl+offer.authorProfilePic}}" width="70" height="70"  class="rounded-circle  shadow">
+                            </span>
+                            <span class=" align-self-center">
+                                <b>{{offer.authorName}}</b><br>
+                                <small class="f-14">RM {{offer.budget}}</small>
+                            </span>
+        
+                        </li></ul>
+                </div>
+            </div>
+            <div class="row justify-content-center flex-column mx-4">
+                <button mat-raised-button class="btn-bg m-2" (click)="openComments()">View All Comments</button>
+                <button mat-raised-button class="btn-bg m-2" (click)="openOffers()">View All Offers</button>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

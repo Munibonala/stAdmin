@@ -1,0 +1,176 @@
+<div class="container-fluid">
+    <div class="row p-0 border-bottom">
+        <div class="col-md-12 p-0">
+            <div class=" d-flex justify-content-between p-4">
+                <h5>Reports</h5>
+                <div>
+                    <mat-button-toggle-group name="fontStyle"  style="border-radius: 10px;"
+                    aria-label="Font Style">
+                    <mat-button-toggle value="poster" (change)="changeView($event)" [ngStyle]="{'background-color':filtercustomer == 'poster' ? '#FA0E0E' : '#FFF', 
+                'color':filtercustomer == 'poster' ? '#fff' : '#000' }"  class="px-3 py-1 f-14">Only Posters
+                    </mat-button-toggle>
+                    <mat-button-toggle value="provider" (change)="changeView($event)" [ngStyle]="{'background-color':filtercustomer == 'provider' ? '#FA0E0E' : '#FFF', 
+                    'color':filtercustomer == 'provider' ? '#fff' : '#000' }"  class="px-3 py-1 f-14">Only Providers
+                        </mat-button-toggle>
+                    <mat-button-toggle value="all" (change)="changeView($event)" [ngStyle]="{'background-color':filtercustomer == 'all' ? '#FA0E0E' : '#FFF', 
+                    'color':filtercustomer == 'all' ? '#fff' : '#000' }"  class="px-3 py-1 f-14">All
+                        </mat-button-toggle>
+                </mat-button-toggle-group>
+                </div>
+            </div>
+        </div>
+    </div>
+    <label class="f-14 mt-3">Customer Details</label>
+    <div class="row bg-light p-0">
+        <div class="col-md-12 d-flex justify-content-between p-2">
+            <form class="form-inline" [formGroup]="reportsForm1">
+                  <!-- <div class="form-group hidden ml-2">
+                    <div class="input-group">
+                      <input name="datepicker"
+                             class="form-control"
+                             ngbDatepicker
+                             #datepicker="ngbDatepicker"
+                             [autoClose]="'outside'"
+                             (dateSelect)="onDateSelection($event)"
+                             [displayMonths]="2"
+                             [dayTemplate]="t"
+                             formControlName="startDate"
+                             outsideDays="hidden"
+                             [startDate]="fromDate!">
+                      <ng-template #t let-date let-focused="focused">
+                        <span class="custom-day"
+                              [class.focused]="focused"
+                              [class.range]="isRange(date)"
+                              [class.faded]="isHovered(date) || isInside(date)"
+                              (mouseenter)="hoveredDate = date"
+                              (mouseleave)="hoveredDate = null">
+                          {{ date.day }}
+                        </span>
+                      </ng-template>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input #dpFromDate readonly
+                             class="form-control bg-white" placeholder="From Date"
+                             name="dpFromDate"
+                             [value]="formatter.format(fromDate)"
+                             (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button">
+                          <i class="fas fa-calendar-alt fa-fw"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group ml-2">
+                    <div class="input-group">
+                      <input #dpToDate readonly 
+                             class="form-control bg-white" placeholder="To Date"
+                             name="dpToDate"
+                             formControlName="endDate"
+                             [value]="formatter.format(toDate)"
+                             (input)="toDate = validateInput(toDate, dpToDate.value)">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button">
+                          <i class="fas fa-calendar-alt fa-fw"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+         -->
+         <div class="input-group">
+            <input type="text" class="form-control" bsDaterangepicker formControlName="dateRange"
+             placeholder="Select date range" [bsValue]="bsInlineRangeValue" [bsConfig]="{ adaptivePosition: true,showWeekNumbers: false }"  #drp="bsDaterangepicker">
+            <div class="input-group-append">
+              <span class="input-group-text hover" id="basic-addon2" (click)="drp.toggle()">
+                  <i class="fas fa-calendar-alt fa-fw"></i>
+              </span>
+            </div>
+          </div>
+                  
+            </form>
+            <div>
+                <button mat-raised-button (click)="getFilteredReport1()" [disabled]="!reportsForm1.valid" class="btn-bg rounded-pill"><i class="fa fa-download"></i> Download</button>
+            </div>
+        </div>
+    </div>
+    <label class="f-14 mt-3">Privider Details</label>
+    <div class="row bg-light p-0">
+        <div class="col-md-12 d-flex justify-content-between p-2">
+            <form class="form-inline" [formGroup]="providerForm">
+         <div class="input-group">
+            <input type="text" class="form-control" bsDaterangepicker formControlName="dateRange"
+             placeholder="Select date range" [bsConfig]="{ adaptivePosition: true }"  #drp2="bsDaterangepicker">
+            <div class="input-group-append">
+              <span class="input-group-text hover" id="basic-addon2" (click)="drp2.toggle()">
+                  <i class="fas fa-calendar-alt fa-fw"></i>
+              </span>
+            </div>
+          </div>
+                  
+            </form>
+            <div>
+                <button mat-raised-button (click)="getproviderDetails()" [disabled]="!providerForm.valid" class="btn-bg rounded-pill"><i class="fa fa-download"></i> Download</button>
+            </div>
+        </div>
+    </div>
+    <label class="f-14 mt-3">Booking Details</label>
+    <div class="row bg-light p-0">
+        <div class="col-md-12 d-flex justify-content-between p-2">
+            <form class="form-inline" [formGroup]="bookingsForm">
+                <div class="input-group">
+                    <input type="text" class="form-control bg-white" readonly [value]="bookingStatus" placeholder="Sort By" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <div class="input-group-append bg-white" [matMenuTriggerFor]="menu">
+                      <span class="input-group-text" id="basic-addon2">
+                        <img src="../../../assets/interface.png" >
+                      </span>
+                    </div>
+                  </div>
+                  <mat-menu #menu="matMenu" class="mobile-menu" [overlapTrigger]="false">
+                    <a mat-menu-item (click)="bookingFilter('All')"   class="text-decoration-none header-text" >
+                        ALL 
+                  </a>
+                <a mat-menu-item  class="text-decoration-none header-text"  (click)="bookingFilter('Completed')" >
+                  Completed 
+              </a>
+              <a mat-menu-item  class="text-decoration-none header-text"   (click)="bookingFilter('Pending')">
+                   Pending
+              </a>
+                  </mat-menu>
+         <div class="input-group ml-2">
+            <input type="text" class="form-control" bsDaterangepicker formControlName="dateRange"
+             placeholder="Select date range" [bsConfig]="{ adaptivePosition: true }"  #drp3="bsDaterangepicker">
+            <div class="input-group-append">
+              <span class="input-group-text hover" id="basic-addon2" (click)="drp3.toggle()">
+                  <i class="fas fa-calendar-alt fa-fw"></i>
+              </span>
+            </div>
+          </div>
+            </form>
+            <div>
+                <button mat-raised-button (click)="getBookings()" [disabled]="!bookingsForm.valid" class="btn-bg rounded-pill"><i class="fa fa-download"></i> Download</button>
+            </div>
+        </div>
+    </div>
+    <label class="f-14 mt-3">Refferal Details</label>
+    <div class="row bg-light p-0">
+        <div class="col-md-12 d-flex justify-content-between p-2">
+            <form class="form-inline" [formGroup]="referralForm">
+         <div class="input-group">
+            <input type="text" class="form-control" bsDaterangepicker formControlName="dateRange"
+             placeholder="Select date range" [bsConfig]="{ adaptivePosition: true }"  #drp4="bsDaterangepicker">
+            <div class="input-group-append">
+              <span class="input-group-text hover" id="basic-addon2" (click)="drp4.toggle()">
+                  <i class="fas fa-calendar-alt fa-fw"></i>
+              </span>
+            </div>
+          </div>
+                  
+            </form>
+            <div>
+                <button mat-raised-button (click)="getReferrals()" [disabled]="!referralForm.valid" class="btn-bg rounded-pill"><i class="fa fa-download"></i> Download</button>
+            </div>
+        </div>
+    </div>
+</div>

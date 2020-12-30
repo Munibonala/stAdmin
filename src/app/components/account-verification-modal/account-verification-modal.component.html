@@ -1,0 +1,24 @@
+<div class="container-fluid my-4" *ngIf="isVerifiedPage">
+    <div class="text-center">
+        <img src="../../../assets/congrats.png">
+    </div>
+    <div >
+        <h5 class="f-18 font-weight-bold text-center p-3">Account Verified..!</h5>
+    </div>
+</div>
+<div class="container-fluid my-4" *ngIf="!isVerifiedPage">
+    <div class="text-center p-2">
+        <h5 class="">
+            Reject Account </h5>
+    </div>
+    <form [formGroup]="reasonForm" class="mb-3">
+        <label class="f-14">Enter Reason</label>
+        <textarea class="form-control f-14" formControlName="reason" rows="2"></textarea>
+    </form>
+    <div class="d-flex justify-content-center pb-2 mt-3">
+        <button mat-raised-button (click)="close()" class="text-black-50 rounded-pill hover" style="font-weight: 400;font-weight: 400; border: 1px solid grey;">
+            &nbsp; &nbsp;   Cancel &nbsp; &nbsp;</button>&nbsp; &nbsp;
+        <button mat-raised-button (click)="submit()" [disabled]="!reasonForm.valid" class="text-white rounded-pill hover btn-bg">
+            &nbsp; &nbsp; Reject &nbsp; &nbsp;</button>&nbsp;
+    </div>
+</div>

@@ -1,0 +1,92 @@
+.list-group-item{
+    padding: 0.5rem 0.2rem 0;
+border-left: none;
+}
+label{
+    padding-right: 0.6rem;
+    font-size: 14px;
+    font-weight: 500;
+    vertical-align: baseline;
+}
+::ng-deep .mat-menu-item{
+    line-height: 32px !important;
+    height: 32px !important;
+}
+.example-full-width{
+    width: 20% !important;
+}
+::ng-deep .mat-form-field-underline {
+    display: none;
+}
+::ng-deep  .mat-form-field-suffix .mat-icon-button{
+ vertical-align: super !important;   
+}
+::ng-deep .mat-form-field-label{
+    color:#000 !important;
+}
+::ng-deep .mat-form-field-wrapper{
+    padding-bottom: 0 !important;
+    padding-top: 0 !important;
+}
+
+::ng-deep .mat-form-field-appearance-legacy .mat-form-field-infix{
+    padding: 0 !important;
+    border-top: none !important;
+}
+cdk-virtual-scroll-viewport{
+  height: 75vh;
+}
+/* Bootstrap 4 text input with search icon */
+.has-search .form-control {
+    padding-left: 2.375rem;
+  }
+  .has-search .fa-search:hover{
+    cursor: pointer !important;
+  }
+  .has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    color: #fa0e0e;
+    padding: 10px;
+    cursor: pointer;
+  }
+  .search-services{
+    border-radius: 20px !important;
+    background-color: #ffffff;
+    opacity: 1;
+  }
+ ::ng-deep input.mat-input-element{
+background-color: #fff !important;
+padding: 10px !important;
+font-size: 14px !important;
+font-weight: 500 !important;
+  }
+  /* Date picker */
+  .form-group.hidden {
+    width: 0;
+    margin: 0;
+    border: none;
+    padding: 0;
+  }
+  .custom-day {
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+  }
+  .custom-day.focused {
+    background-color: #e6e6e6;
+  }
+  .custom-day.range, .custom-day:hover {
+    background-color: rgb(2, 117, 216);
+    color: white;
+  }
+  .custom-day.faded {
+    background-color: rgba(2, 117, 216, 0.5);
+  }

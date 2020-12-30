@@ -1,0 +1,44 @@
+<div class="container-fluid container-wrap">
+<div class="row justify-content-center" style="height: 100vh;">
+<div class="col-md-4 align-self-center p-0 card shadow">
+    <div class="text-center bg-light p-3">
+        <h4 class="text-center">Login </h4>
+    </div>
+    <div>
+        <form [formGroup]="loginForm" class="example-form" (ngSubmit)="submitDetails()">
+            <br>
+            <mat-form-field class="example-full-width" appearance="outline">
+                <mat-label class="small">Email</mat-label>
+                <input matInput  style="background-color: white; color: black;padding: 5px;"  formControlName="userID"
+                  type="email"     placeholder="User ID">    
+                       <mat-error class="small" *ngIf="loginForm.get('userID').touched && loginForm.get('userID').hasError('email')">
+                        Please enter a valid User Id
+                      </mat-error>
+                      <mat-error class="small" *ngIf="loginForm.get('userID').touched && loginForm.get('userID').hasError('required')">
+                        Email is <strong>required</strong>
+                      </mat-error>        
+              </mat-form-field>
+              <mat-form-field class="example-full-width" appearance="outline">
+                <mat-label class="small">Password</mat-label>
+                <input matInput style="background-color: white; color: black;padding: 5px;"   [type]="hide ? 'password' : 'text'" formControlName="password" >
+                       <button mat-icon-button matSuffix type="button" class="text-black-50" (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>            
+                        <mat-error class="small"  *ngIf="loginForm.get('password').touched && loginForm.get('password').hasError('minlength')">
+                            Password should contain minimum 8 letters
+                          </mat-error>
+                          <mat-error class="small" *ngIf="loginForm.get('password').hasError('required')">
+                            Password is <strong>required</strong>
+                          </mat-error> 
+              </mat-form-field>
+   
+              <br><br>
+            <div>
+                <button class="w-100 rounded-pill btn-clr py-1 text-white" style="font-size: 20px;" [class.spinner]="loading" [disabled]="loading"  mat-raised-button >Login</button>
+            </div>
+            <br>
+        </form>
+    </div>
+</div>
+</div>
+</div>

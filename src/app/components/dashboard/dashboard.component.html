@@ -1,0 +1,232 @@
+<div class="container-fluid scroll" style="max-height: 90vh; overflow-y: auto;">
+    <div class="row shadow p-3 mb-2">
+        <div class="col-md-12 p-0">
+            <h4>Dash Board </h4>
+        </div>
+    </div>
+    <div class="row bg-light p-1" *ngIf="quickResult && quickResult.length">
+        <div class="col-md-12 p-0">
+            <h5>Quick Status</h5>
+        </div>
+    </div>
+    <div class="d-flex flex-wrap mt-2" *ngIf="quickResult && quickResult.length">
+    <mat-card class=" p-3 bg-white mx-2 mt-2  rounded" [routerLink]="['/admin/allBookings']">
+        <div>
+            <h3 class="font-weight-bold text-center ">{{quickResult[3].TotalBookings}}</h3>
+            <div class="small font-weight-bold">Total Bookings</div>
+        </div>
+    </mat-card> 
+    <mat-card class=" p-3 bg-white mx-2 mt-2  rounded" [routerLink]="['/admin/task_list']">
+        <div >
+            <h3 class="font-weight-bold text-center ">{{quickResult[2].TaskexpiredCount + quickResult[2].TaskOpenCount + quickResult[2].TaskAssignedCount}}</h3>
+            <div class="small font-weight-bold">Total Jobs Posted</div>
+        </div>
+    </mat-card> 
+    <!-- <mat-card class=" p-3 bg-white mx-2 mt-2  rounded">
+        <div>
+            <h3 class="font-weight-bold text-center ">{{quickResult[3].TotalBookings}}</h3>
+            <div class="small font-weight-bold">Jobs Confirmed Booking</div>
+        </div>
+    </mat-card>  -->
+    <!-- <mat-card class=" p-3 bg-white mx-2 mt-2  rounded">
+        <div>
+            <h3 class="font-weight-bold text-center ">{{quickResult[2].TaskCancelCount}}</h3>
+            <div class="small font-weight-bold">Jobs Cancelation</div>
+        </div>
+    </mat-card>  -->
+    <mat-card class=" p-3 bg-white mx-2 mt-2  rounded">
+        <div>
+            <h3 class="font-weight-bold text-center ">{{quickResult[3].JobsWithdrawal}}</h3>
+            <div class="small font-weight-bold">Jobs Withdraw</div>
+        </div>
+    </mat-card> 
+    <mat-card class=" p-3 bg-white mx-2 mt-2  rounded" (click)="showPendingVerification('Pending')">
+        <div>
+            <h3 class="font-weight-bold text-center ">{{quickResult[0].PendingVerification}}</h3>
+            <div class="small font-weight-bold">Pending Verification</div>
+        </div>
+    </mat-card> 
+    <mat-card class=" p-3 bg-white mx-2 mt-2  rounded" [routerLink]="['/admin/customers']">
+        <div>
+            <h3 class="font-weight-bold text-center ">{{quickResult[0].TotalUsers}}</h3>
+            <div class="small font-weight-bold">Total Users</div>
+        </div>
+    </mat-card> 
+    <mat-card class=" p-3 bg-white mx-2 mt-2  rounded">
+        <div>
+            <h3 class="font-weight-bold text-center " (click)="showPendingVerification('Rejected')">{{quickResult[0].RejectedVerification}}</h3>
+            <div class="small font-weight-bold">Reject Verification</div>
+        </div>
+    </mat-card> 
+    <mat-card class=" p-3 bg-white mx-2 mt-2  rounded">
+        <div>
+            <h3 class="font-weight-bold text-center ">{{quickResult[1].NewCustomersThisMonth}}</h3>
+            <div class="small font-weight-bold">New Customers this month</div>
+        </div>
+    </mat-card>            
+    </div>
+    <div class="row bg-light mt-2" *ngIf="bookingData && bookingData.label">
+        <div class="col-md-12 p-2">
+            <h4 class="font-weight-bold">Total Bookings</h4>
+            <div class="d-flex justify-content-between">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                      <ul class="navbar-nav mr-auto">
+                        <li class="nav-item"  (click)="getThisWeek()">
+                          <a class="nav-link rounded-pill small f-14" [ngClass]="{'active': status.getTypeFilter == 'thisWeek'}">This Week</a>
+                        </li>
+                        <li class="nav-item"  (click)="getThisMonth()">
+                          <a class="nav-link small rounded-pill f-14" [ngClass]="{'active': status.getTypeFilter == 'thisMonth'}">This Month</a>
+                        </li>
+                        <li class="nav-item"  (click)="getThisYear()">
+                            <a class="nav-link  small rounded-pill f-14" [ngClass]="{'active': status.getTypeFilter == 'thisYear'}">This Year</a>
+                          </li>
+                          <!-- <li class="nav-item"  (click)="taskFilter('Pending')">
+                            <a class="nav-link f-14" [ngClass]="{'active': taskStatus == 'Pending'}">Pending</a>
+                          </li>
+                          <li class="nav-item" (click)="taskFilter('Rejected')">
+                            <a class="nav-link f-14" [ngClass]="{'active': taskStatus == 'Rejected'}">Rejected</a>
+                          </li> -->
+                      </ul>
+                    </div>
+                  </nav>
+                  <form class="form-inline mr-5" [formGroup]="bookingsForm">
+                    <div class="input-group">
+                       <input type="text" class="form-control bg-white" [maxDate]="maxDate" bsDaterangepicker readonly formControlName="dateRange"
+                        placeholder="Select date range" [bsConfig]="{ adaptivePosition: true,showWeekNumbers:false }"  #drp2="bsDaterangepicker">
+                       <div class="input-group-append">
+                         <span class="input-group-text hover" id="basic-addon2" (click)="drp2.toggle()">
+                             <i class="fas fa-calendar-alt fa-fw"></i>
+                         </span>
+                       </div>
+                     </div>
+                             <div class=" ml-3">
+                               <button mat-raised-button (click)="getBookingByRange()"  [disabled]="!bookingsForm.valid" class="btn-bg rounded-pill small">Filter</button>
+                             </div>
+                       </form>
+            </div>
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-md-12" *ngIf="bookingData && bookingData.label">
+            <mat-card class="canvas" style="display: block;">
+                <canvas baseChart width="400" height="100"
+                  [datasets]="lineChartData"
+                  [labels]="lineChartLabels"
+                  [options]="lineChartOptions"
+                  [colors]="lineChartColors"
+                  [legend]="lineChartLegend"
+                  [chartType]="lineChartType"
+                  [plugins]="lineChartPlugins">
+                </canvas>
+            </mat-card>
+        </div>
+    </div>
+    <div class="text-center">
+      <mat-button-toggle-group name="fontStyle"  style="border-radius: 20px;"
+          aria-label="Font Style">
+          <mat-button-toggle value="overView" (change)="changeView($event)" [ngStyle]="{'background-color':isLocationBase == false ? '#FA0E0E' : '#FFF', 
+      'color':isLocationBase == false ? '#fff' : '#000' }"  class="px-3 py-1 f-14">Over View
+          </mat-button-toggle>
+          <mat-button-toggle value="location" (change)="changeView($event)" [ngStyle]="{'background-color':isLocationBase == true ? '#FA0E0E' : '#FFF', 
+          'color':isLocationBase == true ? '#fff' : '#000' }"  class="px-3 py-1 f-14">Location Base
+              </mat-button-toggle>
+      </mat-button-toggle-group>
+  </div>
+    <div class="row bg-light mt-2" *ngIf="barChartLabels && barChartLabels.length && barChartData && barChartData.length && !isLocationBase">
+        <div class="col-md-12 p-2">
+            <h4 class="font-weight-bold">Post Jobs Over View</h4>
+            <div class="d-flex justify-content-between">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                      <ul class="navbar-nav mr-auto">
+                        <li class="nav-item"  (click)="getThisWeekPosts()">
+                          <a class="nav-link rounded-pill small f-14" [ngClass]="{'active': categorystatus.getTypeFilter == 'thisWeek'}">This Week</a>
+                        </li>
+                        <li class="nav-item"  (click)="getThisMonthPosts()">
+                          <a class="nav-link small rounded-pill f-14" [ngClass]="{'active': categorystatus.getTypeFilter == 'thisMonth'}">This Month</a>
+                        </li>
+                        <li class="nav-item"  (click)="getThisYearPosts()">
+                            <a class="nav-link  small rounded-pill f-14" [ngClass]="{'active': categorystatus.getTypeFilter == 'thisYear'}">This Year</a>
+                          </li>
+                      </ul>
+                    </div>
+                  </nav>
+                  <form class="form-inline mr-5" [formGroup]="postOverViewForm">
+                    <div class="input-group">
+                       <input type="text" class="form-control bg-white" [maxDate]="maxDate" bsDaterangepicker readonly formControlName="dateRange"
+                        placeholder="Select date range" [bsConfig]="{ adaptivePosition: true,showWeekNumbers:false }"  #drp2="bsDaterangepicker">
+                       <div class="input-group-append">
+                         <span class="input-group-text hover" id="basic-addon2" (click)="drp2.toggle()">
+                             <i class="fas fa-calendar-alt fa-fw"></i>
+                         </span>
+                       </div>
+                     </div>
+                             <div class=" ml-3">
+                               <button mat-raised-button (click)="getPostsByRange()"  [disabled]="!postOverViewForm.valid" class="btn-bg rounded-pill small">Filter</button>
+                             </div>
+                       </form>
+            </div>
+        </div>
+    </div>
+    <div class="row my-3 mx-2" *ngIf="!isLocationBase && barChartLabels && barChartLabels.length && barChartData && barChartData.length">
+        <mat-card class="col-md-6 canvas" *ngFor="let loop of barChartData; let i = index" [ngClass]="{ odd: (i%2 == 0), even: i %2 == 1 } ">
+			<canvas baseChart  height="200"
+        [datasets]="barChartData[i]"
+        [labels]="barChartLabels"
+        [options]="chartOptions"
+        [colors]="barChartColors"
+        [legend]="barChartLegend"
+        [chartType]="barChartType">
+      </canvas>
+        </mat-card>
+    </div>
+    <div class="row bg-light mt-2" *ngIf="barChartLabelsLocation && barChartLabelsLocation.length && barChartDataLocation && barChartDataLocation.length && isLocationBase">
+      <div class="col-md-12 p-2">
+          <h4 class="font-weight-bold">Location Base Over View</h4>
+          <!-- <div class="d-flex justify-content-between">
+              <nav class="navbar navbar-expand-lg navbar-light">
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                      <li class="nav-item"  (click)="getThisWeekPosts()">
+                        <a class="nav-link rounded-pill small f-14" [ngClass]="{'active': categorystatus.getTypeFilter == 'thisWeek'}">This Week</a>
+                      </li>
+                      <li class="nav-item"  (click)="getThisMonthPosts()">
+                        <a class="nav-link small rounded-pill f-14" [ngClass]="{'active': categorystatus.getTypeFilter == 'thisMonth'}">This Month</a>
+                      </li>
+                      <li class="nav-item"  (click)="getThisYearPosts()">
+                          <a class="nav-link  small rounded-pill f-14" [ngClass]="{'active': categorystatus.getTypeFilter == 'thisYear'}">This Year</a>
+                        </li>
+                    </ul>
+                  </div>
+                </nav>
+                <form class="form-inline mr-5" [formGroup]="postOverViewForm">
+                  <div class="input-group">
+                     <input type="text" class="form-control bg-white" [maxDate]="maxDate" bsDaterangepicker readonly formControlName="dateRange"
+                      placeholder="Select date range" [bsConfig]="{ adaptivePosition: true,showWeekNumbers:false }"  #drp2="bsDaterangepicker">
+                     <div class="input-group-append">
+                       <span class="input-group-text hover" id="basic-addon2" (click)="drp2.toggle()">
+                           <i class="fas fa-calendar-alt fa-fw"></i>
+                       </span>
+                     </div>
+                   </div>
+                           <div class=" ml-3">
+                             <button mat-raised-button (click)="getPostsByRange()"  [disabled]="!postOverViewForm.valid" class="btn-bg rounded-pill small">Filter</button>
+                           </div>
+                     </form>
+          </div> -->
+      </div>
+  </div>
+  <div class="row my-3 mx-2" *ngIf="isLocationBase && barChartLabelsLocation && barChartLabelsLocation.length && barChartDataLocation && barChartDataLocation.length">
+      <mat-card class="col-md-6 canvas" *ngFor="let loop of barChartDataLocation; let i = index" [ngClass]="{ odd: (i%2 == 0), even: i %2 == 1 } ">
+    <canvas baseChart  height="200"
+      [datasets]="barChartDataLocation[i]"
+      [labels]="barChartLabelsLocation"
+      [options]="chartOptions"
+      [colors]="barChartColors"
+      [legend]="barChartLegend"
+      [chartType]="barChartType">
+    </canvas>
+      </mat-card>
+  </div>
+</div>

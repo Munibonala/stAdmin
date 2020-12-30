@@ -1,0 +1,84 @@
+<div class="container-fluid bg-white">
+    <div class="d-flex p-2 justify-content-between">
+        <h4 class="align-self-center">Notifications</h4>
+        <div class="align-self-center">
+            <mat-button-toggle-group name="fontStyle"  style="border-radius: 10px;"
+            aria-label="Font Style">
+            <mat-button-toggle value="true" (change)="changeView($event)" [ngStyle]="{'background-color':isSent ? '#FA0E0E' : '#FFF', 
+        'color':isSent ? '#fff' : '#000' }"  class="px-3 py-1 f-14">Sent
+            </mat-button-toggle>
+            
+            <mat-button-toggle value="false" (change)="changeView($event)" [ngStyle]="{'background-color': !isSent ? '#FA0E0E' : '#FFF', 
+            'color': !isSent ? '#fff' : '#000' }"  class="px-3 py-1 f-14">Received
+                </mat-button-toggle>
+        </mat-button-toggle-group>
+        </div>
+    </div>
+    <div class="">
+        <div class="f-14 text-red  hover font-weight-bold mb-3" (click)="deleteAll()">
+            <mat-icon >delete</mat-icon> <span style="vertical-align: super;">   Delete All <span *ngIf="isSent">Sent</span> <span *ngIf="!isSent">Received</span></span>
+        </div>
+    </div>
+    <hr>
+    <div class="scroll" style="max-height: 65vh; overflow-y: auto; overflow-x: hidden;">
+        <div *ngIf="isSent">
+           <ng-container *ngIf="sentNotifications && sentNotifications.length">
+            <div class="d-flex border-bottom hover"  *ngFor="let notification of sentNotifications;let i = index;">
+                <div class="p-2">
+                    <!-- <img src="{{baseUrl+notification.data.profilePic}}" width="40" height="40" class="rounded-circle" > -->
+                    <img src="../../../assets/discount.png" width="40" height="40" class="rounded-circle" >
+                </div>
+                <div class="align-self-center" style="line-height: 20px;">
+                    <small class="f-14">{{notification.notification.title}}</small><br>
+                    <small>{{notification.notification.body}}</small>
+                </div>
+                <span style="display: flex; flex: 1 1 auto;"></span>
+                <div class="align-self-center d-flex"  >
+                    <div class="m-2 text-center" >
+                        <span class="f-14 text-black-50">{{notification.timeStamp | date}}</span> <br>
+                        <mat-icon (click)="delete(notification)">delete</mat-icon>
+                    </div>
+                </div>
+            </div>
+           </ng-container>
+           <div class="h-100 d-flex justify-content-center" style="min-height: 50vh;" *ngIf="sentNotifications && !sentNotifications.length">
+            <h2 class="align-self-center">{{message}}</h2>
+           </div>
+        </div>
+        <div *ngIf="!isSent">
+           <ng-container *ngIf="receivedNotification && receivedNotification.length">
+            <div class="d-flex border-bottom hover" *ngFor="let notification of receivedNotification;let i = index;" >
+                <div class="p-2">
+                    <img src="{{baseUrl+notification.data.profilePic}}" width="40" height="40" class="rounded-circle" >
+                </div>
+                <div class="align-self-center" style="line-height: 20px;" (click)="navigateRelated(notification)">
+                    <small class="f-14">{{notification.notification.title}}</small><br>
+                    <small>{{notification.notification.body}}</small>
+                </div>
+                <span style="display: flex; flex: 1 1 auto;" (click)="navigateRelated(notification)"></span>
+                <div class="align-self-center d-flex"  >
+                    <div class="m-2 text-center" >
+                        <span class="f-14 text-black-50">{{notification.timeStamp | date}}</span> <br>
+                        <mat-icon (click)="delete(notification)">delete</mat-icon>
+                    </div>
+                   
+                </div>
+            </div>
+           </ng-container>
+           <div class="h-100 d-flex justify-content-center" style="min-height: 50vh;" *ngIf="receivedNotification && !receivedNotification.length">
+            <h2 class="align-self-center">{{message}}</h2>
+           </div>
+        </div>
+        <div *ngIf="notifications && !notifications.length" >
+            <div class="d-flex justify-content-center" style="min-height: 55vh; overflow-y: auto; overflow-x: hidden;">
+                <h3 class="align-self-center">You dont have any notifications</h3>
+            </div>
+        </div>
+    </div>
+    </div>
+    <br>
+    <button id="myBtn" class="text-white text-center  font-weight-bold shadow" *ngIf="isSent" (click)="opendetails()" style=" border-radius: 50%; height: 50px; width: 50px;">
+        <small class="position-absolute" style="top: 9px; right: 12px;">
+            <i class="fa fa-plus fa-2x" aria-hidden="true"></i>
+        </small>
+    </button>

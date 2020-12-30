@@ -1,0 +1,60 @@
+<div class="container-fluid border-top ">
+    <div class="row" style="outline: none !important;">
+        <div class="col-md-12">
+            <div class="container-fluid">
+                <div class="d-block d-md-none">
+                    <img src="../../../assets/open-menu.png" (click)="openSideNav()">
+                </div>
+                <div class="row">
+                    <div class="col-md-3  p-0 border-right side" [ngStyle]="{'width':isSideNavOpen ? '100%': '0'}">
+                        <div class="sidebar">
+                            <div class="text-center header">
+                                <div class="float-right d-block d-md-none" (click)="openSideNav()">
+                                    <img src="../../../assets/cancel.png" width="40"
+                                        style="border-radius: 50%; padding: 10px;position: absolute;top: 0;right: 0;">
+                                </div>
+                                <div class="position-relative  user-pic">
+                                    <img src="../../../assets/startasker-new-logo.png" class="img-fluid">
+                                </div>
+                            </div>
+                            <ul class="list-unstyled m-0 bg-white">
+                                <li (click)="openSideNav()">
+                                    <a [ngClass]="{'active':isdetailsPage}" routerLinkActive="active" class="hover text-decoration-none"
+                                        [routerLink]="['/admin/dashboard']" >Dashboard</a></li>
+                                <li (click)="openSideNav()">
+                                    <a routerLinkActive="active" [routerLink]="['/admin/customers']"
+                                        class="hover text-decoration-none"> Customers</a></li>
+                                <li (click)="openSideNav()">
+                                    <a routerLinkActive="active" [routerLink]="['/admin/task_list']"
+                                        class="hover "> Tasks</a></li>
+                                        <li (click)="openSideNav()">
+                                            <a routerLinkActive="active" [routerLink]="['/admin/allBookings']"
+                                                class="hover "> Bookings</a></li>
+                                <li (click)="openSideNav()">
+                                    <a routerLinkActive="active" [routerLink]="['/admin/notifications']"
+                                        class="hover "> Notifications</a></li>
+                                        <li (click)="openSideNav()">
+                                            <a routerLinkActive="active" [routerLink]="['/admin/reports']"
+                                                class="hover "> Reports</a></li>
+                                <li (click)="openSideNav()">
+                                    <a routerLinkActive="active" 
+                                        class="hover " [routerLink]="['/admin/referrals']">Referrals</a></li>
+                                <li (click)="openSideNav()">
+                                    <a routerLinkActive="active" 
+                                        class="hover " [routerLink]="['/admin/settings']"> Settings</a>
+                                    </li>
+                                    <li (click)="logOut()">
+                                        <a routerLinkActive="active" 
+                                            class="hover " > Logout</a>
+                                        </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-9 p-0 position-relative main">
+                        <router-outlet></router-outlet>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

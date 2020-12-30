@@ -1,0 +1,54 @@
+<div class="text-center bg-light p-3">
+    <h5 class="">
+        {{headings}} <span class="float-right hover text-right" (click)="closeTab()">
+            <img width="40" style="border-radius: 50%; padding: 10px;" src="../../../assets/cancel.png">
+        </span></h5>
+</div>
+<div class="container-fluid scroll" style="min-height: 65vh; overflow-y: auto;min-height: 55vh;">
+    <div class="row" *ngIf="offers && offers.length">
+        <div class="col-md-12 " *ngFor="let offer of offers; let i = index">
+            <div class="d-flex">
+                <div class="p-3">
+                    <img src="{{baseUrl+offer.authorProfilePic}}" (click)="showUserProfile(offer.offeredUserID)" width="40" height="40" class="rounded-circle" *ngIf="offer.authorProfilePic != '' ">
+                    <img src="https://stagingapi.startasker.com/user.png" width="40" height="40" class="rounded-circle" *ngIf="offer.authorProfilePic == '' ">
+                </div>
+                <div class="align-self-center" style="line-height: 20px;">
+                    <small>{{offer.authorName}}</small><br>
+                    <!-- <ngb-rating rate="{{offer.authorRatings}}" [starTemplate]="t" [readonly]="true" [max]="5">
+                        <ng-template #t let-fill="fill">
+                        <span class="star" [class.full]="fill === 100">
+                          <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+                        </span>
+                      </ng-template>
+                      </ngb-rating> -->
+                </div>
+                <span style="display: flex; flex: 1 1 auto;"></span>
+                <div class="align-self-center d-flex" style="font-weight: 700;">
+                    <div class="m-2" >
+                        <span style="font-size: 15px;">RM {{offer.budget}}</span>
+                    </div>
+                    
+                    <div class="align-self-center hover px-2" (click)="deleteOffers(offer,i)" >
+                        <img src="../../../assets/delete.png" width="14">
+                    </div>
+                </div>
+            </div>
+            <div>
+               <div class="p-1" >
+                <div class="p-2 bg-light" style="font-weight: 500; border-radius: 15px; margin-left: 3vw;">
+                   <small> {{offer.authorMessages[0].message}}</small>
+                </div>
+                <div class="d-flex" style="margin-left: 3vw;">
+                    <span class="px-3"><small>{{offer.authorMessages[0].timestamp | date}}</small></span>
+                </div>
+               </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center" style="min-height: 30vh;" *ngIf="offers && !offers.length">
+        <h6 class="align-self-center" >
+            No Offers for this task..
+        </h6>
+    </div>
+  
+</div>

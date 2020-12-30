@@ -1,0 +1,37 @@
+.active{
+  color: #fa0e0e !important;
+}
+.nav-item{
+  cursor: pointer;
+}table tr td{
+  font-size: 14px;
+  font-weight: 500;
+}
+
+cdk-virtual-scroll-viewport{
+  height: 50vh;
+}
+/* Bootstrap 4 text input with search icon */
+.has-search .form-control {
+    padding-left: 2.375rem;
+  }
+  .has-search .fa-search:hover{
+    cursor: pointer !important;
+  }
+  .has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    color: #fa0e0e;
+    padding: 10px;
+    cursor: pointer;
+  }
+  .search-services{
+    border-radius: 20px !important;
+    background-color: #ffffff;
+    opacity: 1;
+  }

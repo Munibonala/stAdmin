@@ -1,0 +1,41 @@
+::ng-deep .mat-dialog-container {
+    padding: 0 !important;
+  }
+  ::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content{
+    line-height: unset !important;
+  }
+  .ratings{
+    justify-content: center;
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+    /* Ratings */
+    .main .star{
+        position: relative;
+        display: inline-block;
+        font-size: 2rem;
+        color: #d3d3d3;
+    }
+    .main2 .star{
+      position: relative;
+      display: inline-block;
+      font-size: 1.5rem;
+      color: #d3d3d3;
+  }
+    .star {
+        position: relative;
+        display: inline-block;
+        font-size: 1.2rem;
+        color: #d3d3d3;
+      }
+      .full {
+        color: yellow;
+      }
+      .half {
+        position: absolute;
+        display: inline-block;
+        overflow: hidden;
+        color: yellow !important;
+      }
+    

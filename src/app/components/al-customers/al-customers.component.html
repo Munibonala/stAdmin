@@ -1,0 +1,125 @@
+<div class="container-fluid">
+<div class="row p-0 border-bottom">
+    <div class="col-md-12 p-0">
+        <div class=" d-flex justify-content-between p-4">
+            <h5>Customers</h5>
+            <form class="example-form w-50" [formGroup]="searchByNameForm" (ngSubmit)="searchByName()">
+                <div class="form-group has-search">
+                  <i class="fa fa-search fa-2x form-control-feedback"></i>
+                  <input type="search" class="form-control search-services" formControlName="userID"   placeholder="Search by first or last name">
+                </div>
+                
+              </form>
+        </div>
+    </div>
+</div>
+<div class="row bg-light">
+    <div class="bg-light">
+        <form class="d-flex p-1 justify-content-around" [formGroup]="filterForm">
+            <div>
+                <mat-button-toggle-group name="fontStyle"  style="border-radius: 10px;"
+                aria-label="Font Style">
+                <mat-button-toggle value="Poster" (change)="changeView($event)" [ngStyle]="{'background-color':filtercustomer == 'Poster' ? '#FA0E0E' : '#FFF', 
+            'color':filtercustomer == 'Poster' ? '#fff' : '#000' }"  class="px-3 py-1 f-14">Only Posters
+                </mat-button-toggle>
+                <mat-button-toggle value="Provider" (change)="changeView($event)" [ngStyle]="{'background-color':filtercustomer == 'Provider' ? '#FA0E0E' : '#FFF', 
+                'color':filtercustomer == 'Provider' ? '#fff' : '#000' }"  class="px-3 py-1 f-14">Only Providers
+                    </mat-button-toggle>
+                <mat-button-toggle value="All" (change)="changeView($event)" [ngStyle]="{'background-color':filtercustomer == 'All' ? '#FA0E0E' : '#FFF', 
+                'color':filtercustomer == 'All' ? '#fff' : '#000' }"  class="px-3 py-1 f-14">All
+                    </mat-button-toggle>
+            </mat-button-toggle-group>
+            </div>
+         <!-- <mat-form-field   [ngClass]="{'showDetails':isSelected}" class="hide-arrow example-full-width " style="width: 30%;">
+             <input matInput  class=" mr-2 border-top px-1 py-2 f-14  bg-white text-center" readonly  [value]="filterOption">
+             <button mat-button  matSuffix mat-icon-button aria-label="Clear"  #r="matMenuTrigger" mat-icon-button [matMenuTriggerFor]="menu">
+                 <img src="../../../assets/interface.png" (click)="open(r)">
+               </button>
+           </mat-form-field> -->
+           <div class="w-75 position-relative mx-2 hover" [matMenuTriggerFor]="menu">
+            <span class="position-absolute"   style="top: 0;right: 0;margin-top: 0.6rem;margin-right: 5px;">
+                <img src="../../../assets/sort.png" width="10">
+                </span>
+          <input type="text" class="form-control bg-white " readonly [value]="filterOption">
+        </div>
+           <!-- <div class="input-group">
+            <input type="text" class="form-control bg-white" readonly [value]="filterOption" placeholder="Sort By" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <div class="input-group-append bg-white" [matMenuTriggerFor]="menu">
+              <span class="input-group-text" id="basic-addon2">
+                <img src="../../../assets/interface.png" >
+              </span>
+            </div>
+          </div> -->
+          <div class="input-group ml-2">
+            <input type="text" class="form-control" [maxDate]="maxDate" bsDaterangepicker formControlName="dateRange"
+             placeholder="Select date range" [bsConfig]="{ adaptivePosition: true }"  #drp2="bsDaterangepicker">
+            <div class="input-group-append">
+              <span class="input-group-text hover" id="basic-addon2" (click)="drp2.toggle()">
+                  <i class="fas fa-calendar-alt fa-fw"></i>
+              </span>
+            </div>
+          </div>
+          <div class="align-self-center ml-3">
+            <button mat-raised-button (click)="getFilteredTask()"  class="btn-bg rounded-pill small">Filter</button>
+          </div>
+        </form>
+           <mat-menu #menu="matMenu" class="mobile-menu" [overlapTrigger]="false">
+             <a mat-menu-item  [ngClass]="{'text-success': taskStatus == 'All'}" (click)="showOnly('All')" class="text-decoration-none header-text" >
+                 ALL
+           </a>
+         <a mat-menu-item  class="text-decoration-none header-text" (click)="showOnly('Verified')" [ngClass]="{'text-success': filterOption == 'Verified'}" (click)="tasksFilter('Open')" >
+           Verified
+       </a>
+       <a mat-menu-item  class="text-decoration-none header-text" (click)="showOnly('Unverified')" [ngClass]="{'text-success': filterOption == 'Unverified'}" (click)="tasksFilter('Open')" >
+        UnVerified
+    </a>
+       <a mat-menu-item  class="text-decoration-none header-text" (click)="showOnly('Pending')" [ngClass]="{'text-success': filterOption == 'Pending'}"  (click)="tasksFilter('Assigned')">
+        Pending
+       </a>
+       <a mat-menu-item  class="text-decoration-none header-text" (click)="showOnly('Rejected')" [ngClass]="{'text-success': filterOption == 'Rejected'}"  (click)="tasksFilter('Assigned')">
+         Rejected
+    </a>
+
+           </mat-menu>
+     </div>
+     <span style="flex: 1 1 auto;"></span>
+     <!-- <button mat-raised-button class="btn-bg rounded-pill" (click)="download()">Download</button> -->
+     <!-- <span (click)="fetchAllUsers()" class="align-self-center hover">
+         <img src="../../../assets/reload.png" width="30">
+     </span> -->
+</div>
+<div class="row mt-3 justify-content-center scroll"  id="main-wrap" style="overflow-y: scroll;max-height: 75vh; ">
+    <!-- <cdk-virtual-scroll-viewport itemSize="60" (scrolledIndexChange)='onScrollEnd()'  class="scroll">
+       
+    </cdk-virtual-scroll-viewport> -->
+    <div class="col-md-4 mb-2" *ngFor="let customer of filterdCustomers;">
+        <div class="card p-2">
+            <ul class="list-unstyled mt-2">
+                <li class="d-flex ml-1">
+                    <span>
+                        <img *ngIf="customer.profilePic != ''" src="{{baseUrl+customer.profilePic}}" (click)="showUserDetails(customer)" width="55" height="55"  class="rounded-circle hover shadow">
+                    </span>
+                    <span class=" pl-2 align-self-center">
+                        <b style="font-size: 14px;">{{customer.firstName}} {{customer.lastName}}</b><br>
+                        <span *ngIf="customer.accountVerificationStatus == 'Unverified'" (click)="showUserDetails(customer)" class="bg-success shadow f-14 hover text-white px-2 rounded-pill py-1"> View Profile</span>
+                        <span *ngIf="customer.accountVerificationStatus == 'Rejected'" (click)="showUserDetails(customer)" class="bg-red shadow f-14 text-white hover px-2 rounded-pill py-1"> Regected</span>
+                        <span *ngIf="customer.accountVerificationStatus == 'Verified'" (click)="showUserDetails(customer)" class=" f-14 bg-success rounded-pill shadow text-white  px-2  py-1">Verified</span>
+                        <span *ngIf="customer.accountVerificationStatus == 'Pending'" (click)="showUserDetails(customer)" class=" f-14 btn-bg rounded-pill hover shadow text-white  px-2  py-1">Verify Account</span>
+                    </span>
+
+                </li></ul>
+                <div class="ml-2">
+                    <span class="text-muted f-14">Joined on {{customer.register_time | date}}</span>
+                </div>
+        </div>
+    </div>
+    <div class="col-md-4 align-self-center text-center p-2" *ngIf="!isTotalCountReached">
+        <button mat-raised-button class="btn-bg rounded-pill"  *ngIf="!isFetchingUsers" (click)="loadMore()">
+            Load More
+        </button>
+    </div>
+</div>
+<div class="d-flex justify-content-center h-75" *ngIf="filterdCustomers && !filterdCustomers.length">
+<h3>{{message}}</h3>
+</div>
+</div>

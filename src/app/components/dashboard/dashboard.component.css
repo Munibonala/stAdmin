@@ -1,0 +1,16 @@
+mat-card:not(.canvas):hover{
+    background-color: #4665d9 !important;
+    color: #fff;
+    cursor: pointer;
+}
+.nav-item{
+    cursor: pointer;
+  }
+.active{
+    background-color: #faf1f1;
+    color: #ff5252 !important;
+    font-weight:  bold !important;
+}
+::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content{
+    line-height: unset !important;
+  }
