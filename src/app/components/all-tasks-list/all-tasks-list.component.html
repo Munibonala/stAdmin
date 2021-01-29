@@ -1,4 +1,4 @@
-<div class="container-fluid ">
+<div class="container-fluid " *ngIf="!isDetails">
     <div class="row bg-light p-3 mb-2">
         <div class="col-md-12 d-flex justify-content-between p-0">
             <h4>Tasks List </h4>
@@ -82,12 +82,12 @@
     <div class="row " >
         <div *ngIf="filteredData && filteredData.length"  class="col-md-12 p-0">
             <div class="list-group mr-3 pt-1">
-              <cdk-virtual-scroll-viewport itemSize="20" (scrolledIndexChange)='onScrollEnd()' style="overflow-y: scroll;max-height: 75vh; " class="scroll">
+              <cdk-virtual-scroll-viewport itemSize="20" (scrolledIndexChange)='onScrollEnd()' #scroll style="overflow-y: scroll;max-height: 75vh;scroll-behavior: smooth !important; " class="scroll">
                 <a class="list-group-item hover   list-group-item-action"
                 *cdkVirtualFor="let jobs of filteredData ; let i = index; last as isLast" [ngClass]="{'mb-5': isLast}" >
                 <div class="d-flex  px-2 justify-content-start" style="font-size: 14px; font-weight: 500;">
                     <div class=" px-3">
-                        <img *ngIf="jobs.userInfo.profilePic != ''" src="{{'https://stagingapi.startasker.com/'+jobs.userInfo.profilePic}}" width="60" height="60" style="border-radius: 50%;">
+                        <img *ngIf="jobs.userInfo.profilePic != ''" src="{{'https://liveapi.startasker.com/'+jobs.userInfo.profilePic}}" width="60" height="60" style="border-radius: 50%;">
                     </div>
                     <div class=" pl-1 flex-fill">
                         <div class="my-1 d-flex" style="font-weight: 600;">
@@ -96,8 +96,8 @@
                             <span class="font-weight-bold text-nowrap small">RM
                                 {{jobs.budget.budget}}</span>
                         </div>
-                        <ul class="list-unstyled ">
-                            <li class="d-flex justify-content-start">
+                        <ul class="list-unstyled " (click)="openDetails(jobs)">
+                            <li class="d-flex justify-content-start" >
                                 <span>
                                     <img src="../../../assets/Icon-material-location-on.png"
                                     class="d-inline-block" width="13">
@@ -126,7 +126,7 @@
                                         <small *ngFor="let timings of jobs.convenientTimings">{{timings}}, </small>
                                     </span>
                             </span>
-                            <span style="flex: 1 1 auto;"></span>
+                            <span style="flex: 1 1 auto;" (click)="openDetails(jobs)"></span>
                             <span [ngStyle]="{'color' : getColors(jobs.post_Status)}" style="font-size: 0.8rem !important;font-weight: 600;">{{jobs.post_Status}}</span>
                             </li>
                         </ul>
@@ -152,4 +152,7 @@
             <h5 class="align-self-center"> {{dataMessage}}</h5>
         </div>
     </div>
+</div>
+<div *ngIf="isDetails">
+  <app-task-details [childID]="taskID" (closeEvent)="receiveMessage($event)"></app-task-details>
 </div>

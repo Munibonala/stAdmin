@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, Output, SimpleChanges,EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
@@ -12,10 +12,10 @@ import { ReviewModalComponent } from '../review-modal/review-modal.component';
   templateUrl: './customer-details.component.html',
   styleUrls: ['./customer-details.component.css']
 })
-export class CustomerDetailsComponent implements OnInit {
+export class CustomerDetailsComponent implements OnInit , OnChanges {
   asPoster:boolean = false;
   asTasker:boolean = false;
-  image:string = "https://stagingapi.startasker.com//images/Customers/oPJpQ1600825844027JPEG_20200923_095041_1007186395530940084.jpg";
+  image:string = "https://liveapi.startasker.com//images/Customers/oPJpQ1600825844027JPEG_20200923_095041_1007186395530940084.jpg";
   UserDetails:any;
   id:any;
   routeSub:any;
@@ -32,21 +32,64 @@ export class CustomerDetailsComponent implements OnInit {
   isSelfieUploaded:boolean = false;
   isIDUploaded:boolean = false;
   totalReviews:number = 0;
+  isFromAllCustomers:boolean = false;
   userReviews:any = {
     TaskCompletedCount: 0,
   completedPercentage: "0"
   };
   isUpdatePhone:boolean = false;
+  isUserBlocked:boolean = false;
+  @Input() childID: string;
+  @Output() closeEvent = new EventEmitter();
   constructor(private adminService:AdminService, private activatedRoute:ActivatedRoute, private fb:FormBuilder,
     private dialog:MatDialog , private snackBar:MatSnackBar) { }
 
   ngOnInit() {
+    this.onLoad()
+  }
+  ngOnChanges(changes: SimpleChanges){
+    this.id = this.childID;
+    this.isFromAllCustomers = true
+    this.fetchData();
+  }
+  onLoad(){
     this.baseUrl = this.adminService.baseUrl
     this.routeSub = this.activatedRoute.params.subscribe(params => {
       //log the entire params object
+    if(params && params['id']){
       this.id = params['id'];
       this.fetchData()
+    }
    });
+  }
+  closeDetails(){
+    this.isFromAllCustomers = false;
+    this.closeEvent.emit(false);
+  }
+  blockOrUnBlock(){
+    let obj = {
+      customerID : this.UserDetails.userID,
+      "isBlocked": !this.isUserBlocked
+    }
+    this.adminService.showLoader.next(true);
+    let token = sessionStorage.getItem('token');
+    this.adminService.blockUnBlock(obj,token).subscribe((posRes)=>{
+      if(posRes.response == 3){
+        this.adminService.showLoader.next(false);
+        this.openSnackBar(posRes.message,"");
+        this.isUserBlocked = !this.isUserBlocked;
+      }else{
+        this.openSnackBar(posRes.message,"")
+      }
+    },(err:HttpErrorResponse)=>{
+      this.adminService.showLoader.next(false);
+      this.openSnackBar(err.message,"");
+      if(err.error instanceof Error){
+        console.warn("Client Side Error",err.error);
+      }else{
+        console.warn("Server Side Error",err.error);
+      }
+    })
   }
   fetchData() {
     this.adminService.showLoader.next(true);
@@ -58,6 +101,7 @@ export class CustomerDetailsComponent implements OnInit {
       if (posRes.response == 3) {
         this.UserDetails = posRes.userInfo[0]
         console.log(this.UserDetails);
+        this.isUserBlocked = this.UserDetails.isUserBlocked
         if(this.UserDetails.accountVerificationStatus == "Verified" || this.UserDetails.accountVerificationStatus == "Rejected"){
           this.isAccountVerified = true;
         }else{

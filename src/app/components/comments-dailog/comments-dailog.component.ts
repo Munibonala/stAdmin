@@ -84,7 +84,7 @@ export class CommentsDailogComponent implements OnInit {
     })
     dailogRef.afterClosed().subscribe(res=>{
     if(res){
-      let token = sessionStorage.getItem('authToken');
+      let token = sessionStorage.getItem('token');
       this.adminService.deleteComments(obj,token).subscribe((posRes)=>{
         this.comments.splice(i,1);
         alert("Comment Delated")

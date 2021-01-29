@@ -1,6 +1,9 @@
 <div class="container-fluid">
     <div class="row  bg-light">
         <div class="col-md-5 d-flex justify-content-between">
+            <div class="position-absolute hover" *ngIf="isFromAllCustomers" style="top: 0;left: 0;" (click)="closeDetails()">
+                <img src="../../../assets/criss_cross.png">
+            </div>
             <div class="ml-4 position-relative" *ngIf="UserDetails && UserDetails.accountVerificationStatus">
                 <img src="{{image}}"    class="rounded-circle avathar" [ngStyle]="{'border': UserDetails.accountVerificationStatus == 'Verified' ? '3px solid green' : 'none'}">
                 <div class="edit-icon hover" *ngIf="UserDetails.accountVerificationStatus == 'Verified'">
@@ -12,6 +15,10 @@
                <p class="mb-o f-14">
                    <span>{{UserDetails.address}}</span>
                </p>
+               <p class="mb-o f-14">
+                <button mat-raised-button *ngIf="!isUserBlocked" class="btn-bg rounded-pill small" (click)="blockOrUnBlock()">Block User</button>
+                <button mat-raised-button *ngIf="isUserBlocked" class="btn-bg rounded-pill small" (click)="blockOrUnBlock()">UnBlock User</button>
+            </p>
            </div>
         </div>
         <div class="col-md-3 align-self-center">
@@ -126,7 +133,7 @@
             </div>
             <div class="d-flex flex-wrap gallery-sec ml-2" *ngIf="gallery && gallery.length">
                 <div class="ml-1" *ngFor="let img of gallery">
-                    <img src="{{'https://stagingapi.startasker.com'+img}}" width="70" height="70" class="rounded hover">
+                    <img src="{{'https://liveapi.startasker.com'+img}}" width="70" height="70" class="rounded hover">
                 </div>
             </div>
             <div class="bg-light">

@@ -1,5 +1,8 @@
 <div class="p-3 shadow">
-    <h4 >Details </h4>
+    <div class="position-absolute hover" *ngIf="isFromAllTask" style="top: 0;left: 0;" (click)="closeDetails()">
+        <img src="../../../assets/criss_cross.png" width="24">
+    </div>
+    <h4 class="pt-1">Details </h4>
 </div>
 <div class="container mt-3 scroll" style="max-height: 80vh; overflow-y: auto;" *ngIf="rawData && rawData.postTitle ">
     <div class="row scroll">
@@ -85,6 +88,9 @@
                                     </div>
                                 </div>
                                 <!-- <p class="text-red f-14 mt-3">Payment on hold</p> -->
+                                <div class="f-14  mt-1" *ngIf="rawData.post_Status == 'Cancel'">
+                                    <p class="text-red font-weight-bold border-bottom">Cancel Reason  :</p>  <span> {{rawData.reason}}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -124,6 +130,7 @@
                 <button mat-raised-button class="btn-bg m-2" (click)="openComments()">View All Comments</button>
                 <button mat-raised-button class="btn-bg m-2" (click)="openOffers()">View All Offers</button>
             </div>
+            
             </div>
         </div>
     </div>

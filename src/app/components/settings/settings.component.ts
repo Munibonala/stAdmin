@@ -163,7 +163,7 @@ deleteCat(data,i){
 }
 updateAmount(){
   this.adminService.showLoader.next(true)
-  let token = sessionStorage.getItem('token')
+  let token = sessionStorage.getItem('token');
   this.adminService.updateAmount(this.prizeForm.value,token).subscribe((posRes)=>{
     this.adminService.showLoader.next(false);
     if(posRes.response == 3){

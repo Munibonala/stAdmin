@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
@@ -25,8 +25,11 @@ export class AllTasksListComponent implements OnInit {
   date = null;
   totalItemsCount:number = 0;
 debounceTime = null;
+isDetails:boolean = false;
+taskID:string = "";
 jobObj:any
   @ViewChild('t',{static:false}) datePicker: NgbInputDatepicker;
+  @ViewChild ("scroll",{static: false}) scrollContainer:ElementRef;
   @ViewChild(CdkVirtualScrollViewport, { static: false }) viewPort: CdkVirtualScrollViewport;
   hoveredDate: NgbDate | null = null;
 
@@ -54,37 +57,7 @@ jobObj:any
       duration: 3000
     });
   }
-  // Date Picker
-  // onDateSelection(date: NgbDate) {
-  //   if (!this.fromDate && !this.toDate) {
-  //     this.fromDate = date;
-     
-  //   } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
-  //     this.toDate = date;
-  //     this.datePicker.close()
-  //   } else {
-  //     this.toDate = null;
-  //     this.fromDate = date;
-  //   }
-  //   console.log(this.fromDate, this.toDate);
-  // }
-  // isHovered(date: NgbDate) {
-  //   return this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate);
-  // }
-
-  // isInside(date: NgbDate) {
-  //   return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
-  // }
-
-  // isRange(date: NgbDate) {
-  //   return date.equals(this.fromDate) || (this.toDate && date.equals(this.toDate)) || this.isInside(date) || this.isHovered(date);
-  // }
-
-  // validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
-  //   const parsed = this.formatter.parse(input);
-  //   return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
-  // }
-  // Vertual Scroll pagination
+  
   onScrollEnd(){
     if(this.viewPort){
       this.viewPort.elementScrolled().subscribe(
@@ -98,8 +71,9 @@ jobObj:any
             (res as any).srcElement.scrollHeight   && this.totalPageCount > this.pageNo
           ) {
             console.log("View Port",this.viewPort)
+             
             this.pageNo = this.pageNo + 1;
-            this.getJobs()
+            this.getJobs();
           }
         }, 100)
         });
@@ -162,7 +136,7 @@ jobObj:any
             this.jobs[i].budget.budget = num * val.budget.pricePerHour;
           }
         })
-        this.filteredData = this.jobs
+        this.filteredData = this.jobs;
     }else{
       this.openSnackBar(pos.message,"")
     }
@@ -183,6 +157,8 @@ jobObj:any
         return '#09A804';
         case "Assigned": return '#FF870E';
         case "Completed": return '#Fa0e0e';
+        case "Expired": return '#33b5e5';
+        case "Cancel": return '#9435a9';
     }
   }
   open(imag){
@@ -252,6 +228,7 @@ jobObj:any
       this.adminService.showLoader.next(false);
       console.log("results",posRes);
       if(posRes.response == 3){
+        
         this.jobs = posRes.jobsData;
         this.jobsCopy = posRes.jobsData;
         this.totalPageCount = posRes.pages;
@@ -266,6 +243,8 @@ jobObj:any
         })
         this.filteredData = this.filteredData.concat(this.jobs);
         this.cd.detectChanges()
+        let num = this.pageNo * 20
+        // this.viewPort.scrollToIndex(num -20,'smooth')
       }else{
   this.openSnackBar(posRes.message,"");
       }
@@ -283,7 +262,12 @@ jobObj:any
   showDate(event){
     console.log(event);   
   }
+  receiveMessage(event){
+    this.isDetails = !event
+  }
   openDetails(job){
-this.router.navigate(['admin','details',job.postID])
+    this.isDetails = true;
+    this.taskID = job.postID;
+// this.router.navigate(['admin','details',job.postID])
   }
 }

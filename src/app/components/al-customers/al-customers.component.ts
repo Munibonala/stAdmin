@@ -31,9 +31,11 @@ filterForm:FormGroup;
 searchByNameForm:FormGroup;
 customerObj:any = null;
 isSearchByName:boolean = false;
+isDetails:boolean = false
 keywordSearch:any;
+customerID:string = ""
 @ViewChild(CdkVirtualScrollViewport, { static: false }) viewPort: CdkVirtualScrollViewport;
-image:string = "https://stagingapi.startasker.com//images/Customers/NYlLT1600410727105JPEG_20200918_143028_1044443140.jpg"
+image:string = "https://liveapi.startasker.com//images/Customers/NYlLT1600410727105JPEG_20200918_143028_1044443140.jpg"
   constructor(private adminService:AdminService, private router:Router, private fb:FormBuilder,
     private snackBar:MatSnackBar, private activatedRoute: ActivatedRoute) { }
 
@@ -162,10 +164,14 @@ this.isFetchingUsers = false;
   changeView(event){
   this.filtercustomer = event.value;
   }
-  
+  receiveMessage(event){
+    this.isDetails = event;
+  }
   showUserDetails(customer){
     this.adminService.showLoader.next(true);
-    this.router.navigate(['admin','customer',customer.userID]);
+    this.isDetails = true;
+    this.customerID = customer.userID
+    // this.router.navigate(['admin','customer',customer.userID]);
   }
  loadMore(){
    this.pageNo = this.pageNo + 1;

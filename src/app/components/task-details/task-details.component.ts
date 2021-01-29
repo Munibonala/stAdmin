@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AdminService } from 'src/app/admin.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommentsDailogComponent } from '../comments-dailog/comments-dailog.component';
@@ -11,7 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './task-details.component.html',
   styleUrls: ['./task-details.component.css']
 })
-export class TaskDetailsComponent implements OnInit {
+export class TaskDetailsComponent implements OnInit ,OnChanges {
   rawData:any;
   id:string;
   taskUserInfo:any;
@@ -23,19 +23,34 @@ export class TaskDetailsComponent implements OnInit {
   comments:Array<any> = [];
   offers:Array<any> = [];
   assigned:Array<any> = [];
-
+  @Input() childID: string;
+  @Output() closeEvent = new EventEmitter();
+  isFromAllTask:boolean = false;
   constructor(private adminService:AdminService,private router:Router, private activatedRoute:ActivatedRoute,
     private dialog:MatDialog) { }
 
   ngOnInit() {
+   this.onLoad()
+  }
+  onLoad(){
     this.baseUrl = this.adminService.baseUrl;
     this.routeSub = this.activatedRoute.params.subscribe(params => {
       //log the entire params object
+     if(params && params['id']){
       this.id = params['id'];
       this.getTaskDetails()
+     }
    }); 
   }
-
+  ngOnChanges(changes: SimpleChanges){
+    this.isFromAllTask = true
+    this.id = this.childID;
+    this.getTaskDetails();
+  }
+  closeDetails(){
+    this.isFromAllTask = false;
+    this.closeEvent.emit(true)
+  }
   getColors(status){
     switch (status){
       case "Open":
@@ -63,7 +78,7 @@ export class TaskDetailsComponent implements OnInit {
             return val.isTaskerHired && !val.isTaskerWithDraw
           })
           if(this.taskUserInfo.profilePic != ""){
-            this.image = "https://stagingapi.startasker.com"+this.taskUserInfo.profilePic
+            this.image = "https://liveapi.startasker.com"+this.taskUserInfo.profilePic
           }
         }
         if(this.rawData.budget.budgetType.Total == false){

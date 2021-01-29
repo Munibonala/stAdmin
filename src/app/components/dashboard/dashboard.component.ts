@@ -148,7 +148,7 @@ browseCategory(){
       posRes.categoriesList.forEach(val=>{
          return categories.push(val.categoryName)
        })
-      console.log("Catre madi",categories);
+     
       this.barChartLabels = categories.sort();
     }else{
       this.openSnackBar(posRes.message,"")

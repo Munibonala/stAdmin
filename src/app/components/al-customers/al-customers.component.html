@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="!isDetails">
 <div class="row p-0 border-bottom">
     <div class="col-md-12 p-0">
         <div class=" d-flex justify-content-between p-4">
@@ -8,7 +8,6 @@
                   <i class="fa fa-search fa-2x form-control-feedback"></i>
                   <input type="search" class="form-control search-services" formControlName="userID"   placeholder="Search by first or last name">
                 </div>
-                
               </form>
         </div>
     </div>
@@ -122,4 +121,7 @@
 <div class="d-flex justify-content-center h-75" *ngIf="filterdCustomers && !filterdCustomers.length">
 <h3>{{message}}</h3>
 </div>
+</div>
+<div *ngIf="isDetails">
+    <app-customer-details [childID]="customerID" (closeEvent)="receiveMessage($event)"></app-customer-details>
 </div>

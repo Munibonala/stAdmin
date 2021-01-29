@@ -6,15 +6,16 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class AdminService {
-  public baseUrl:string = "https://stagingapi.startasker.com";
+  public baseUrl:string = "https://liveapi.startasker.com";
+  stagingUrl:string = "https://liveapi.startasker.com"
   showLoader = new BehaviorSubject(false);
   constructor(private http:HttpClient) { }
 
   adminLogin(data){
-    return this.http.post(`https://stagingapi.startasker.com/api/admin/login`,data)
+    return this.http.post(`https://liveapi.startasker.com/api/admin/login`,data)
   }
   updateMobileNumber(data,token):Observable<any>{
-    return this.http.put("https://stagingapi.startasker.com/api/customer/updatemobileno",data,{headers:{"startasker":token}})
+    return this.http.put("https://liveapi.startasker.com/api/customer/updatemobileno",data,{headers:{"startasker":token}})
   }
   // Dash Board Api's
   fetchStatus(token):Observable<any>{
@@ -30,41 +31,40 @@ export class AdminService {
     return this.http.post(`${this.baseUrl}/api/admin/getStateWiseJobs`,data,{headers:{"startasker":token}})
   }
   browsBookings():Observable<any>{
-    return this.http.get("https://stagingapi.startasker.com/api/postjob/fetch_all");
+    return this.http.get("https://liveapi.startasker.com/api/postjob/fetch_all");
   }
   searchByName(data,token):Observable<any>{
     return this.http.post(`${this.baseUrl}/api/admin/namesearching`,data,{headers:{"startasker":token}})
   }
   releasePaymentToProvider(data,token):Observable<any>{
-    return this.http.post("https://stagingapi.startasker.com/api/admin/status",data,{headers:{"startasker":token}})
+    return this.http.post("https://liveapi.startasker.com/api/admin/status",data,{headers:{"startasker":token}})
   }
   getMyTasks(data):Observable<any>{
-    return this.http.post("https://stagingapi.startasker.com/api/postjob/get",data) 
+    return this.http.post("https://liveapi.startasker.com/api/postjob/get",data) 
    }
    deleteTask(data,token){
     return this.http.post(`${this.baseUrl}/api/admin/deletetask`,data,{headers:{"startasker":token}})
    }
    getFilteredTasks(data,token){
-     return this.http.post("https://stagingapi.startasker.com/api/admin/fetchtask",data,{headers:{"startasker":token}})
+     return this.http.post("https://liveapi.startasker.com/api/admin/fetchtask",data,{headers:{"startasker":token}})
    }
    browseCategory():Observable<any>{
-    return this.http.get('https://stagingapi.startasker.com/api/categories')
+    return this.http.get('https://liveapi.startasker.com/api/categories')
   }
   bookingDetails(data,token):Observable<any>{
-    console.log(`${this.baseUrl}/api/hire/`,data);
     return this.http.post(`${this.baseUrl}/api/hire/`,data,{headers:{"startasker":token}})
   }
   ediComment(data,token):Observable<any>{
     return this.http.post(`${this.baseUrl}/api/admin/updatecomment`,data,{headers:{"startasker":token}});
   }
   fetchAllbookings(data,token):Observable<any>{
-    return this.http.post('https://stagingapi.startasker.com/api/admin/bookings',data,{headers:{"startasker":token}})
+    return this.http.post('https://liveapi.startasker.com/api/admin/bookings',data,{headers:{"startasker":token}})
   }
   fetchAllCustomers(data,token):Observable<any>{
-    return this.http.post("https://stagingapi.startasker.com/api/admin/filters",data,{headers:{"startasker":token}})
+    return this.http.post("https://liveapi.startasker.com/api/admin/filters",data,{headers:{"startasker":token}})
   }
  downloadReports(data,token):Observable<any>{
-   return this.http.post("https://stagingapi.startasker.com/api/admin/Reports",data,{headers:{"startasker":token},responseType: 'arraybuffer'})
+   return this.http.post("https://liveapi.startasker.com/api/admin/Reports",data,{headers:{"startasker":token},responseType: 'arraybuffer'})
  }
   deleteComments(data,token):Observable<any>{
 return this.http.post(`${this.baseUrl}/api/admin/deletecomment`,data,{headers:{"startasker":token}})
@@ -73,11 +73,16 @@ return this.http.post(`${this.baseUrl}/api/admin/deletecomment`,data,{headers:{"
     return this.http.post(`${this.baseUrl}/api/admin/deleteprovidertask`,data,{headers:{"startasker":token}})
   }
       fetchUserDetails(id,token):Observable<any>{
-        return this.http.post("https://stagingapi.startasker.com/api/admin/",id,{headers:{"startasker":token}})
+        return this.http.post("https://liveapi.startasker.com/api/admin/",id,{headers:{"startasker":token}})
+          }
+          // Block or unblock
+        
+          blockUnBlock(data,token):Observable<any>{
+            return this.http.post("https://liveapi.startasker.com/api/admin/blockOrUnblock",data,{headers:{"startasker":token}})
           }
           // Account verification
           verifyCustomer(data,token):Observable<any>{
-            return this.http.post("https://stagingapi.startasker.com/api/admin/verification",data,{headers:{"startasker":token}})
+            return this.http.post("https://liveapi.startasker.com/api/admin/verification",data,{headers:{"startasker":token}})
           }
           // Refferal
           getReferralData(data,token):Observable<any>{
