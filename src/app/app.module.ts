@@ -34,6 +34,7 @@ import { BsDatepickerConfig, BsDatepickerModule, BsDaterangepickerConfig } from 
 import { ReferralsComponent } from './components/referrals/referrals.component';
 import { UserRefferalDailogComponent } from './components/user-refferal-dailog/user-refferal-dailog.component';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { FiltersComponent } from './components/filters/filters.component';
 
 
 @NgModule({
@@ -58,11 +59,12 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
     SendNotificationsDailogComponent,
     ReportsComponent,
     ReferralsComponent,
-    UserRefferalDailogComponent
+    UserRefferalDailogComponent,
+    FiltersComponent
   ],
   entryComponents:[DeleteDailogComponent,CommentsDailogComponent,OffersDailogComponent,
     ReviewModalComponent,AccountVerificationModalComponent,SendNotificationsDailogComponent,
-    UserRefferalDailogComponent],
+    UserRefferalDailogComponent,FiltersComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

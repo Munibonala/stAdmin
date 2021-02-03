@@ -2,9 +2,10 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from 'src/app/admin.service';
+import { FiltersComponent } from '../filters/filters.component';
 
 @Component({
   selector: 'app-al-customers',
@@ -34,10 +35,12 @@ isSearchByName:boolean = false;
 isDetails:boolean = false
 keywordSearch:any;
 customerID:string = ""
+currentPage:number = 0;
+totalPages:number = 0;
 @ViewChild(CdkVirtualScrollViewport, { static: false }) viewPort: CdkVirtualScrollViewport;
 image:string = "https://liveapi.startasker.com//images/Customers/NYlLT1600410727105JPEG_20200918_143028_1044443140.jpg"
   constructor(private adminService:AdminService, private router:Router, private fb:FormBuilder,
-    private snackBar:MatSnackBar, private activatedRoute: ActivatedRoute) { }
+    private snackBar:MatSnackBar, private activatedRoute: ActivatedRoute,private dialog:MatDialog) { }
 
   ngOnInit() {
     this.activatedRoute.queryParamMap.subscribe(params => {
@@ -160,7 +163,25 @@ this.isFetchingUsers = false;
       this.fetchAllUsers()
     }
   }
-  tasksFilter(text){}
+  taskFilters(){
+    let obj = {
+      from : "AllCust"
+    }
+   let dialogRef = this.dialog.open(FiltersComponent,{
+      panelClass:'col-md-4',
+      hasBackdrop : true,
+      disableClose: true,
+      data : obj
+    })
+    dialogRef.afterClosed().subscribe(res=>{
+      if(res && res.pageNo){
+        this.filterdCustomers = [];
+        this.customerObj = res;
+        console.log(this.customerObj);
+        this.fetchAllUsers();
+      }
+    })
+  }
   changeView(event){
   this.filtercustomer = event.value;
   }
@@ -192,7 +213,8 @@ this.isFetchingUsers = false;
    this.isFetchingUsers = true;
    this.customerObj.pageNo = ""+this.pageNo
    this.adminService.showLoader.next(true);
-   let token = sessionStorage.getItem('token')
+   let token = sessionStorage.getItem('token');
+   debugger;
    this.customerSubscribe = this.adminService.fetchAllCustomers(this.customerObj,token).subscribe((posRes)=>{
      console.log("All Users",posRes);
      this.message = "No Users Found.."

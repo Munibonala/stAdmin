@@ -8,8 +8,10 @@
     <div class="row scroll">
         <div class="col-md-6 mb-2" style=" border-radius: 12px;">
             <p class=" text-muted pb-0 mb-0" *ngIf="rawData && rawData.postTitle"
-                style="color: #030303; font-size: 24px; padding: 10px;">
-                {{rawData.postTitle}}</p>
+                style="color: #030303; font-size: 24px; padding: 10px;line-height: 1.2rem;">
+                {{rawData.postTitle}}<br>
+                <small style="font-size: 14px; padding: 10px 0;">({{rawData.postID}})</small>
+            </p>
                 <div class="container">
                     <div class="row">
                         <div class="col-md-8">
@@ -22,7 +24,6 @@
                                         <b>{{taskUserInfo.firstName}} {{taskUserInfo.lastName}}</b><br>
                                         <small style="font-weight: 500;">{{date | date}}</small>
                                     </span>
-                
                                 </li>
                                 <li class="clear"></li>
                                 <li class="d-flex justify-content-start">

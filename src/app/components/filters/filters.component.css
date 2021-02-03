@@ -1,0 +1,16 @@
+::ng-deep .mat-dialog-container {
+    padding: 0 !important;
+  }
+  .bg-red{
+    background-color: #fa0e0e;
+}
+::ng-deep .mat-menu-item{
+    line-height: 32px !important;
+    height: 32px !important;
+}
+::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content{
+    line-height: unset !important;
+  }
+  .example-full-width{
+    width: 100% !important;
+}

@@ -1,0 +1,61 @@
+<div class="text-center bg-light p-3">
+    <h5 class="">
+        {{headings}} <span class="float-right hover text-right" (click)="closeTab()">
+            <img width="40" style="border-radius: 50%; padding: 10px;" src="../../../assets/cancel.png">
+        </span></h5>
+</div>
+<div class="container p-3">
+    <form class="p-1" [formGroup]="filterForm">
+        <div class="mb-5">
+            <mat-button-toggle-group name="fontStyle"  style="border-radius: 10px;"
+            aria-label="Font Style">
+            <mat-button-toggle value="Poster" (change)="changeView($event)" [ngStyle]="{'background-color':filtercustomer == 'Poster' ? '#FA0E0E' : '#FFF', 
+        'color':filtercustomer == 'Poster' ? '#fff' : '#000' }"  class="px-3 py-1 f-14">Only Posters
+            </mat-button-toggle>
+            <mat-button-toggle value="Provider" (change)="changeView($event)" [ngStyle]="{'background-color':filtercustomer == 'Provider' ? '#FA0E0E' : '#FFF', 
+            'color':filtercustomer == 'Provider' ? '#fff' : '#000' }"  class="px-3 py-1 f-14">Only Providers
+                </mat-button-toggle>
+            <mat-button-toggle value="All" (change)="changeView($event)" [ngStyle]="{'background-color':filtercustomer == 'All' ? '#FA0E0E' : '#FFF', 
+            'color':filtercustomer == 'All' ? '#fff' : '#000' }"  class="px-3 py-1 f-14">All
+                </mat-button-toggle>
+        </mat-button-toggle-group>
+        </div>
+  
+       <div class="position-relative mb-4 hover" [matMenuTriggerFor]="menu">
+        <span class="position-absolute"   style="top: 0;right: 0;margin-top: 0.6rem;margin-right: 5px;">
+            <img src="../../../assets/sort.png" width="10">
+            </span>
+      <input type="text" class="form-control bg-white " readonly [value]="filterOption">
+    </div>
+     
+      <div class="input-group mb-4">
+        <input type="text" class="form-control" [maxDate]="maxDate" bsDaterangepicker formControlName="dateRange"
+         placeholder="Select date range" [bsConfig]="{ adaptivePosition: true }"  #drp2="bsDaterangepicker">
+        <div class="input-group-append">
+          <span class="input-group-text hover" id="basic-addon2" (click)="drp2.toggle()">
+              <i class="fas fa-calendar-alt fa-fw"></i>
+          </span>
+        </div>
+      </div>
+      <div class="align-self-center text-center ml-3">
+        <button mat-raised-button (click)="getFilteredTask()"  class="btn-bg rounded-pill small">Apply Filter</button>
+      </div>
+    </form>
+    <mat-menu #menu="matMenu" class="mobile-menu" [overlapTrigger]="false">
+        <a mat-menu-item  [ngClass]="{'text-success': taskStatus == 'All'}" (click)="showOnly('All')" class="text-decoration-none header-text" >
+            ALL
+      </a>
+    <a mat-menu-item  class="text-decoration-none header-text" (click)="showOnly('Verified')" [ngClass]="{'text-success': filterOption == 'Verified'}" >
+      Verified
+  </a>
+  <a mat-menu-item  class="text-decoration-none header-text" (click)="showOnly('Unverified')" [ngClass]="{'text-success': filterOption == 'Unverified'}"  >
+   UnVerified
+</a>
+  <a mat-menu-item  class="text-decoration-none header-text" (click)="showOnly('Pending')" [ngClass]="{'text-success': filterOption == 'Pending'}" >
+   Pending
+  </a>
+  <a mat-menu-item  class="text-decoration-none header-text" (click)="showOnly('Rejected')" [ngClass]="{'text-success': filterOption == 'Rejected'}">
+    Rejected
+</a>
+      </mat-menu>
+</div>
