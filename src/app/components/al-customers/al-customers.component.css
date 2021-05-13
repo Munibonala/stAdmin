@@ -1,6 +1,9 @@
 .bg-red{
     background-color: #fa0e0e;
 }
+::ng-deep .mat-menu-content{
+  max-height: 50vh !important;
+}
 ::ng-deep .mat-menu-item{
     line-height: 32px !important;
     height: 32px !important;
@@ -11,11 +14,11 @@
   .example-full-width{
     width: 100% !important;
 }
-cdk-virtual-scroll-viewport{
-    height: 80vh;
-    width: 100%;
-}
-::ng-deep .mat-form-field-flex{
+.disabled {
+  pointer-events:none;
+  opacity:.5;
+ }
+ /* ::ng-deep .mat-form-field-flex{
     border: 1px solid lightgray;
     border-radius: 5px;
     background-color: white;
@@ -23,7 +26,7 @@ cdk-virtual-scroll-viewport{
 ::ng-deep .mat-form-field-underline {
     display: none;
 }
-::ng-deep  .mat-form-field-suffix .mat-icon-button{
+::ng-deep .mat-form-field-suffix .mat-icon-button{
  vertical-align: super !important;   
 }
 ::ng-deep .mat-form-field-label{
@@ -37,7 +40,7 @@ cdk-virtual-scroll-viewport{
 ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-infix{
     padding: 0 !important;
     border-top: none !important;
-}
+} */
 /* Bootstrap 4 text input with search icon */
 .has-search .form-control {
     padding-left: 2.375rem;
@@ -62,9 +65,9 @@ cdk-virtual-scroll-viewport{
     background-color: #ffffff;
     opacity: 1;
   }
- ::ng-deep input.mat-input-element{
+  /* ::ng-deep input.mat-input-element{
 background-color: #fff !important;
 padding: 10px !important;
 font-size: 14px !important;
 font-weight: 500 !important;
-  }
+  } */

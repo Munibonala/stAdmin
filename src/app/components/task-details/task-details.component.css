@@ -1,6 +1,9 @@
 *{
     font-family: "proxy reg", sans-serif !important;
   }
+  ::ng-deep .material-icons{
+    font-family: 'Material Icons' !important;
+  }
 .toolbar-text a{
     font-size: 13px;
     font-weight: 600;
@@ -8,12 +11,21 @@
     .form-control:focus{
         border: 1px solid rgba(128, 128, 128,0.4);
     }
+    .delete-icon{
+        position: absolute;
+        top: 70%;
+        left: 70%;
+        
+    }
     .job-status span{
         padding: 5px 25px;
         background-color: #cccccc;
         border-radius: 10px;
         font-size: small;
         color: white;
+    }
+    .view-chat:hover{
+        border-bottom: 1px solid lightgray;
     }
     .job-status span.active{
         background-color: #FA0e0e;

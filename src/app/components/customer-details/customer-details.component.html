@@ -5,13 +5,14 @@
                 <img src="../../../assets/criss_cross.png">
             </div>
             <div class="ml-4 position-relative" *ngIf="UserDetails && UserDetails.accountVerificationStatus">
-                <img src="{{image}}"    class="rounded-circle avathar" [ngStyle]="{'border': UserDetails.accountVerificationStatus == 'Verified' ? '3px solid green' : 'none'}">
+                <img src="{{image}}"  (click)="dpPreview(image)"   class="rounded-circle avathar hover" [ngStyle]="{'border': UserDetails.accountVerificationStatus == 'Verified' ? '3px solid green' : 'none'}">
                 <div class="edit-icon hover" *ngIf="UserDetails.accountVerificationStatus == 'Verified'">
                     <img src="../../../assets/ic_verified.png" width="30">
                 </div>
                </div>
            <div class="align-self-center px-4 d-flex flex-column" *ngIf="UserDetails && UserDetails.firstName">
                <p class="mb-0 f-18">{{UserDetails.firstName}}</p>
+               
                <p class="mb-o f-14">
                    <span>{{UserDetails.address}}</span>
                </p>
@@ -133,7 +134,7 @@
             </div>
             <div class="d-flex flex-wrap gallery-sec ml-2" *ngIf="gallery && gallery.length">
                 <div class="ml-1" *ngFor="let img of gallery">
-                    <img src="{{'https://liveapi.startasker.com'+img}}" width="70" height="70" class="rounded hover">
+                    <img src="{{'https://stagingapi.startasker.com'+img}}" (click)="openGallery()" width="70" height="70" class="rounded hover">
                 </div>
             </div>
             <div class="bg-light">
@@ -181,7 +182,7 @@
                                         </span> 
                                     <div class="mt-3"> ID Photo</div>
                                       <div>
-                                        <img class="img-fluid hover" *ngIf="accountData.IDPhoto != ''" style="height: 5rem;" src="{{baseUrl+accountData.IDPhoto}}">
+                                        <img class="img-fluid hover" *ngIf="accountData.IDPhoto != ''" style="height: 5rem;"  src="{{baseUrl+accountData.IDPhoto}}" (click)="showIdProof(accountData.IDPhoto,accountData.profilePhoto)">
                                         <img class="img-fluid hover" *ngIf="accountData.IDPhoto == ''" style="height: 5rem;" src="../../../assets/Add.png">
                                       </div>
                                   </div>
@@ -191,7 +192,7 @@
                                         </span> -->
                                     <div class="mt-3"> Selfie</div>
                                     <div>
-                                        <img class="img-fluid hover" *ngIf="accountData.profilePhoto != ''" style="height: 5rem;" src="{{baseUrl+accountData.profilePhoto}}">
+                                        <img class="img-fluid hover" *ngIf="accountData.profilePhoto != ''" style="height: 5rem;" src="{{baseUrl+accountData.profilePhoto}}" (click)="showIdProof(accountData.profilePhoto,accountData.IDPhoto)">
                                         <img class="img-fluid hover" *ngIf="accountData.profilePhoto == ''" style="height: 5rem;" src="../../../assets/Add.png">
                                       </div>
                                   </div>

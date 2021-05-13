@@ -4,9 +4,9 @@
             <img width="40" style="border-radius: 50%; padding: 10px;" src="../../../assets/cancel.png">
         </span></h5>
 </div>
-<div class="container p-3">
+<div class="container p-3" *ngIf="isAllCustmerFilters">
     <form class="p-1" [formGroup]="filterForm">
-        <div class="mb-5">
+        <div class="mb-2">
             <mat-button-toggle-group name="fontStyle"  style="border-radius: 10px;"
             aria-label="Font Style">
             <mat-button-toggle value="Poster" (change)="changeView($event)" [ngStyle]="{'background-color':filtercustomer == 'Poster' ? '#FA0E0E' : '#FFF', 
@@ -20,14 +20,28 @@
                 </mat-button-toggle>
         </mat-button-toggle-group>
         </div>
-  
-       <div class="position-relative mb-4 hover" [matMenuTriggerFor]="menu">
-        <span class="position-absolute"   style="top: 0;right: 0;margin-top: 0.6rem;margin-right: 5px;">
+        <label class="f-14">Select User Type</label>
+       <div class="position-relative mb-2 hover" [matMenuTriggerFor]="menu">
+        <span class="position-absolute hover"   style="top: 0;right: 0;margin-top: 0.6rem;margin-right: 5px;">
             <img src="../../../assets/sort.png" width="10">
             </span>
       <input type="text" class="form-control bg-white " readonly [value]="filterOption">
     </div>
-     
+    <label class="f-14">Select State</label>
+    <div class="position-relative mb-4 hover" [matMenuTriggerFor]="Statesmenu">
+     <span class="position-absolute hover"   style="top: 0;right: 0;margin-top: 0.6rem;margin-right: 5px;">
+         <img src="../../../assets/sort.png" width="10">
+         </span>
+         
+   <input type="text" class="form-control bg-white f-14" readonly [value]="state">
+  </div>
+  <label class="f-14">Select Category</label>
+    <div class="position-relative mb-4 hover" [matMenuTriggerFor]="Catmenu">
+     <span class="position-absolute hover"   style="top: 0;right: 0;margin-top: 0.6rem;margin-right: 5px;">
+         <img src="../../../assets/sort.png" width="10">
+         </span>
+   <input type="text" class="form-control bg-white f-14" readonly [value]="category">
+  </div>
       <div class="input-group mb-4">
         <input type="text" class="form-control" [maxDate]="maxDate" bsDaterangepicker formControlName="dateRange"
          placeholder="Select date range" [bsConfig]="{ adaptivePosition: true }"  #drp2="bsDaterangepicker">
@@ -38,9 +52,19 @@
         </div>
       </div>
       <div class="align-self-center text-center ml-3">
-        <button mat-raised-button (click)="getFilteredTask()"  class="btn-bg rounded-pill small">Apply Filter</button>
+        <button mat-raised-button (click)="getFilteredCustomers()"  class="btn-bg rounded-pill small">Apply Filter</button>
       </div>
     </form>
+    <mat-menu #Statesmenu="matMenu" class="mobile-menu" [overlapTrigger]="false">
+      <a mat-menu-item  *ngFor="let state of statesArray; let i = index;" (click)="selectState(state)" class="text-decoration-none header-text" >
+          {{state}}
+    </a>
+    </mat-menu>
+    <mat-menu #Catmenu="matMenu" class="mobile-menu" [overlapTrigger]="false">
+      <a mat-menu-item  *ngFor="let cat of data.cat; let i = index;" (click)="selectCat(cat.categoryName)" class="text-decoration-none header-text" >
+          {{cat.categoryName}}
+    </a>
+    </mat-menu>
     <mat-menu #menu="matMenu" class="mobile-menu" [overlapTrigger]="false">
         <a mat-menu-item  [ngClass]="{'text-success': taskStatus == 'All'}" (click)="showOnly('All')" class="text-decoration-none header-text" >
             ALL
@@ -58,4 +82,110 @@
     Rejected
 </a>
       </mat-menu>
+</div>
+<div class="container p-3" *ngIf="isAllTasksFilters">
+  <form class="p-1" [formGroup]="filterForm">
+    <label class="f-14">Select Task Type</label>
+     <div class="position-relative mb-4 hover" [matMenuTriggerFor]="menu">
+      <span class="position-absolute"   style="top: 0;right: 0;margin-top: 0.6rem;margin-right: 5px;">
+          <img src="../../../assets/sort.png" width="10">
+          </span>
+          
+    <input type="text" class="form-control bg-white f-14" readonly [value]="taskStatus">
+  </div>
+  <label class="f-14">Select State</label>
+  <div class="position-relative mb-4 hover" [matMenuTriggerFor]="Statesmenu">
+   <span class="position-absolute"   style="top: 0;right: 0;margin-top: 0.6rem;margin-right: 5px;">
+       <img src="../../../assets/sort.png" width="10">
+       </span>
+       
+ <input type="text" class="form-control bg-white f-14" readonly [value]="state">
+</div>
+    <div class="input-group mb-4">
+      <input type="text" class="form-control" [maxDate]="maxDate" bsDaterangepicker formControlName="dateRange"
+       placeholder="Select date range" [bsConfig]="{ adaptivePosition: true }"  #drp2="bsDaterangepicker">
+      <div class="input-group-append">
+        <span class="input-group-text hover" id="basic-addon2" (click)="drp2.toggle()">
+            <i class="fas fa-calendar-alt fa-fw"></i>
+        </span>
+      </div>
+    </div>
+    <div class="align-self-center text-center ml-3">
+      <button mat-raised-button (click)="getFilteredTask()"  class="btn-bg rounded-pill small">Apply Filter</button>
+    </div>
+  </form>
+  <mat-menu #Statesmenu="matMenu" class="mobile-menu" [overlapTrigger]="false">
+    <a mat-menu-item  *ngFor="let state of statesArray; let i = index;" (click)="selectState(state)" class="text-decoration-none header-text" >
+        {{state}}
+  </a>
+  </mat-menu>
+  <mat-menu #menu="matMenu" class="mobile-menu" [overlapTrigger]="false">
+    <a mat-menu-item (click)="tasksFilter('All')" [ngClass]="{'text-success': taskStatus == 'All'}"  class="text-decoration-none header-text" >
+        ALL TASKS
+  </a>
+<a mat-menu-item  class="text-decoration-none header-text" [ngClass]="{'text-success': taskStatus == 'Open'}" (click)="tasksFilter('Open')" >
+  OPEN 
+</a>
+<a mat-menu-item  class="text-decoration-none header-text" [ngClass]="{'text-success': taskStatus == 'Assigned'}"  (click)="tasksFilter('Assigned')">
+   ASSIGNED
+</a>
+
+<a mat-menu-item   class="text-decoration-none header-text" (click)="tasksFilter('Completed')" [ngClass]="{'text-success': taskStatus == 'Completed'}">
+  COMPLETED
+</a>
+
+<a mat-menu-item   class="text-decoration-none header-text" (click)="tasksFilter('Cancel')" [ngClass]="{'text-success': taskStatus == 'Cancel'}">
+CANCEL
+</a>
+<a mat-menu-item   class="text-decoration-none header-text" (click)="tasksFilter('Expired')" [ngClass]="{'text-success': taskStatus == 'Cancel'}">
+EXPIRED
+</a>
+  </mat-menu>
+</div>
+<div class="container p-3" *ngIf="isAllBookings">
+  <form class="p-1" [formGroup]="filterForm">
+    <label class="f-14">Select Booking Type</label>
+     <div class="position-relative mb-4 hover" [matMenuTriggerFor]="menu">
+      <span class="position-absolute"   style="top: 0;right: 0;margin-top: 0.6rem;margin-right: 5px;">
+          <img src="../../../assets/sort.png" width="10">
+          </span>
+    <input type="text" class="form-control bg-white f-14" readonly [value]="bookingStatus">
+  </div>
+  <label class="f-14">Select State</label>
+  <div class="position-relative mb-4 hover" [matMenuTriggerFor]="Statesmenu">
+   <span class="position-absolute"   style="top: 0;right: 0;margin-top: 0.6rem;margin-right: 5px;">
+       <img src="../../../assets/sort.png" width="10">
+       </span>
+       
+ <input type="text" class="form-control bg-white f-14" readonly [value]="state">
+</div>
+    <div class="input-group mb-4">
+      <input type="text" class="form-control" [maxDate]="maxDate" bsDaterangepicker formControlName="dateRange"
+       placeholder="Select date range" [bsConfig]="{ adaptivePosition: true }"  #drp2="bsDaterangepicker">
+      <div class="input-group-append">
+        <span class="input-group-text hover" id="basic-addon2" (click)="drp2.toggle()">
+            <i class="fas fa-calendar-alt fa-fw"></i>
+        </span>
+      </div>
+    </div>
+    <div class="align-self-center text-center ml-3">
+      <button mat-raised-button (click)="getFilteredBookings()"  class="btn-bg rounded-pill small">Apply Filter</button>
+    </div>
+  </form>
+  <mat-menu #Statesmenu="matMenu" class="mobile-menu" [overlapTrigger]="false">
+    <a mat-menu-item  *ngFor="let state of statesArray; let i = index;" (click)="selectState(state)" class="text-decoration-none header-text" >
+        {{state}}
+  </a>
+  </mat-menu>
+  <mat-menu #menu="matMenu" class="mobile-menu" [overlapTrigger]="false">
+    <a mat-menu-item (click)="bookingsFilter('All')" [ngClass]="{'text-success': bookingStatus == 'All'}"  class="text-decoration-none header-text" >
+      ALL 
+</a>
+<a mat-menu-item  class="text-decoration-none header-text" [ngClass]="{'text-success': bookingStatus == 'Completed'}" (click)="bookingsFilter('Completed')" >
+Completed 
+</a>
+<a mat-menu-item  class="text-decoration-none header-text" [ngClass]="{'text-success': bookingStatus == 'Pending'}"  (click)="bookingsFilter('Pending')">
+ Pending
+</a>
+  </mat-menu>
 </div>

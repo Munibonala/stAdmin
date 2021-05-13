@@ -8,6 +8,13 @@ label{
     font-weight: 500;
     vertical-align: baseline;
 }
+.disabled {
+  pointer-events:none;
+  opacity:.5;
+ }
+ ::ng-deep .mat-menu-content{
+  max-height: 50vh !important;
+}
 ::ng-deep .mat-menu-item{
     line-height: 32px !important;
     height: 32px !important;
@@ -15,21 +22,21 @@ label{
 .example-full-width{
     width: 20% !important;
 }
-::ng-deep .mat-form-field-underline {
+ .mat-form-field-underline {
     display: none;
 }
-::ng-deep  .mat-form-field-suffix .mat-icon-button{
+ .mat-form-field-suffix .mat-icon-button{
  vertical-align: super !important;   
 }
-::ng-deep .mat-form-field-label{
+ .mat-form-field-label{
     color:#000 !important;
 }
-::ng-deep .mat-form-field-wrapper{
+.mat-form-field-wrapper{
     padding-bottom: 0 !important;
     padding-top: 0 !important;
 }
 
-::ng-deep .mat-form-field-appearance-legacy .mat-form-field-infix{
+ .mat-form-field-appearance-legacy .mat-form-field-infix{
     padding: 0 !important;
     border-top: none !important;
 }
@@ -60,12 +67,12 @@ cdk-virtual-scroll-viewport{
     background-color: #ffffff;
     opacity: 1;
   }
- ::ng-deep input.mat-input-element{
+ /* ::ng-deep input.mat-input-element{
 background-color: #fff !important;
 padding: 10px !important;
 font-size: 14px !important;
 font-weight: 500 !important;
-  }
+  } */
   /* Date picker */
   .form-group.hidden {
     width: 0;
@@ -73,20 +80,4 @@ font-weight: 500 !important;
     border: none;
     padding: 0;
   }
-  .custom-day {
-    text-align: center;
-    padding: 0.185rem 0.25rem;
-    display: inline-block;
-    height: 2rem;
-    width: 2rem;
-  }
-  .custom-day.focused {
-    background-color: #e6e6e6;
-  }
-  .custom-day.range, .custom-day:hover {
-    background-color: rgb(2, 117, 216);
-    color: white;
-  }
-  .custom-day.faded {
-    background-color: rgba(2, 117, 216, 0.5);
-  }
+ 

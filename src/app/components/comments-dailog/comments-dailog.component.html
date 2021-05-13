@@ -12,7 +12,7 @@
                 <div class="d-flex">
                     <div class="p-2">
                         <img src="{{baseUrl+offer.author_url}}" (click)="showUserProfile(offer.author_email)" width="40" height="40" class="rounded-circle" *ngIf="offer.authorProfilePic != '' ">
-                        <img src="https://liveapi.startasker.com/user.png" width="40" height="40" class="rounded-circle" *ngIf="offer.authorProfilePic == '' ">
+                        <img src="https://stagingapi.startasker.com/user.png" width="40" height="40" class="rounded-circle" *ngIf="offer.authorProfilePic == '' ">
                     </div>
                     <div class="align-self-center" >
                         <small>{{offer.author}}</small>

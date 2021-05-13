@@ -1,7 +1,7 @@
 <div class="container-fluid " *ngIf="!isDetails">
-    <div class="row bg-light p-3 mb-2">
-        <div class="col-md-12 d-flex justify-content-between p-0">
-            <h4>Tasks List </h4>
+    <div class="row mb-2">
+        <div class="col-md-12 d-flex bg-white justify-content-between p-2">
+            <h4 >Tasks List </h4>
             <form class="example-form " >
                 <div class="form-group has-search">
                   <i class="fa fa-search fa-2x form-control-feedback"></i>
@@ -10,84 +10,39 @@
                 
               </form>
         </div>
+        <div class="col-md-12 d-flex  bg-light p-2  justify-content-between">
+          <div class=" p-2">
+              <span class="f-18 hover p-2" style="font-weight: 600;" (click)="taskFilters()">Add Filters <span> <img src="../../../assets/sort.png"> </span></span>
+               
+           </div>
+           <div class="align-self-center d-flex justify-content-between" >
+             <div class="mr-2">
+              <button mat-raised-button class="f-14 small" [matMenuTriggerFor]="menu">Page {{pageNo}} of {{totalPageCount}}</button>
+              <mat-menu #menu="matMenu" class="mobile-menu" [overlapTrigger]="false" >
+                  <a mat-menu-item  class="text-decoration-none header-text" [ngClass]="{'disabled': num === pageNo}" *ngFor="let num of pageNumbers;" (click)="gotoSelectedPage(num)">
+                      {{num}}
+                </a>
+                </mat-menu>
+             </div>
+                <div>
+                  <mat-button-toggle-group appearance="legacy" class="bg-white text-dark" name="fontStyle" aria-label="Font Style">
+                      <mat-button-toggle class="text-dark small" (click)="previousPage()" [ngClass]="{'disabled':pageNo == 1}" value="bold">Prev</mat-button-toggle>
+                      <mat-button-toggle class="text-dark small" (click)="nextPage()" [ngClass]="{'disabled':pageNo == totalPageCount}" value="underline">Next</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+          </div>
+      </div>
     </div>
-    <div class="row p-2 bg-light">
-       <form class="form-inline" [formGroup]="filterForm">
-      
-          <div class="input-group">
-            <input type="text" class="form-control bg-white" readonly [value]="taskStatus" placeholder="Sort By" aria-label="Recipient's username" aria-describedby="basic-addon2">
-            <div class="input-group-append bg-white" [matMenuTriggerFor]="menu">
-              <span class="input-group-text" id="basic-addon2">
-                <img src="../../../assets/interface.png" >
-              </span>
-            </div>
-          </div>
-          <div class="input-group ml-2">
-            <input type="text" class="form-control" bsDaterangepicker formControlName="dateRange"
-             placeholder="Select date range" [bsConfig]="{ adaptivePosition: true }"  #drp2="bsDaterangepicker">
-            <div class="input-group-append">
-              <span class="input-group-text hover" id="basic-addon2" (click)="drp2.toggle()">
-                  <i class="fas fa-calendar-alt fa-fw"></i>
-              </span>
-            </div>
-          </div>
-
-         
-          <div class="align-self-center ml-3">
-            <button mat-raised-button (click)="getFilteredTask()"  class="btn-bg rounded-pill small">Submit</button>
-          </div>
-          <!-- <div class="input-group px-2">
-              <label>From</label>
-            <input type="date" class="form-control bg-white"   placeholder="Sort By" aria-label="Recipient's username" aria-describedby="basic-addon2">
-          </div>
-          <div class="input-group px-2">
-            <label>To</label>
-          <input type="date" class="form-control bg-white"   placeholder="Sort By" aria-label="Recipient's username" aria-describedby="basic-addon2">
-        </div> -->
-        <!-- <div>
-            <button mat-raised-button class="rounded-pill">filter</button>
-        </div> -->
-       </form>
-          <mat-menu #menu="matMenu" class="mobile-menu" [overlapTrigger]="false">
-            <a mat-menu-item (click)="tasksFilter('All')" [ngClass]="{'text-success': taskStatus == 'All'}"  class="text-decoration-none header-text" >
-                ALL TASKS
-          </a>
-        <a mat-menu-item  class="text-decoration-none header-text" [ngClass]="{'text-success': taskStatus == 'Open'}" (click)="tasksFilter('Open')" >
-          OPEN 
-      </a>
-      <a mat-menu-item  class="text-decoration-none header-text" [ngClass]="{'text-success': taskStatus == 'Assigned'}"  (click)="tasksFilter('Assigned')">
-           ASSIGNED
-      </a>
-      <!-- <a mat-menu-item  class="text-decoration-none header-text" [ngClass]="{'text-success': taskStatus == 'Assigned'}"  (click)="tasksFilter('Assigned')">
-        PAYMENT ON HOLD 
-   </a> -->
-      <a mat-menu-item   class="text-decoration-none header-text" (click)="tasksFilter('Completed')" [ngClass]="{'text-success': taskStatus == 'Completed'}">
-          COMPLETED
-      </a>
-      <!-- <a mat-menu-item   class="text-decoration-none header-text" (click)="tasksFilter('Expired')" [ngClass]="{'text-success': taskStatus == 'Expired'}">
-        EXPIRED
-    </a> -->
-      <a mat-menu-item   class="text-decoration-none header-text" (click)="tasksFilter('Cancel')" [ngClass]="{'text-success': taskStatus == 'Cancel'}">
-        CANCEL
-    </a>
-    <a mat-menu-item   class="text-decoration-none header-text" (click)="tasksFilter('Expired')" [ngClass]="{'text-success': taskStatus == 'Cancel'}">
-      EXPIRED
-  </a>
-      <!-- <a mat-menu-item   class="text-decoration-none header-text" (click)="tasksFilter()" [ngClass]="{'text-success': taskStatus == 'cancelled'}">
-        CANCELLED
-    </a> -->
-          </mat-menu>
-          
-    </div>
+    
     <div class="row " >
         <div *ngIf="filteredData && filteredData.length"  class="col-md-12 p-0">
             <div class="list-group mr-3 pt-1">
-              <cdk-virtual-scroll-viewport itemSize="20" (scrolledIndexChange)='onScrollEnd()' #scroll style="overflow-y: scroll;max-height: 75vh;scroll-behavior: smooth !important; " class="scroll">
+              <div #scroll style="overflow-y: scroll;max-height: 75vh;scroll-behavior: smooth !important; " class="scroll">
                 <a class="list-group-item hover   list-group-item-action"
-                *cdkVirtualFor="let jobs of filteredData ; let i = index; last as isLast" [ngClass]="{'mb-5': isLast}" >
+                *ngFor="let jobs of filteredData ; let i = index; last as isLast" [ngClass]="{'mb-5': isLast}" >
                 <div class="d-flex  px-2 justify-content-start" style="font-size: 14px; font-weight: 500;">
                     <div class=" px-3">
-                        <img *ngIf="jobs.userInfo.profilePic != ''" src="{{'https://liveapi.startasker.com/'+jobs.userInfo.profilePic}}" width="60" height="60" style="border-radius: 50%;">
+                        <img *ngIf="jobs.userInfo.profilePic != ''" src="{{'https://stagingapi.startasker.com/'+jobs.userInfo.profilePic}}" width="60" height="60" style="border-radius: 50%;">
                     </div>
                     <div class=" pl-1 flex-fill">
                         <div class="my-1 d-flex" style="font-weight: 600;">
@@ -142,7 +97,7 @@
                     </div>
                 </div>
             </a>
-              </cdk-virtual-scroll-viewport>
+          </div>
                
             </div>
            

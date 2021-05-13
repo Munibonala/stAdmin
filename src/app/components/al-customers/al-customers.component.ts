@@ -1,6 +1,6 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { FiltersComponent } from '../filters/filters.component';
 @Component({
   selector: 'app-al-customers',
   templateUrl: './al-customers.component.html',
-  styleUrls: ['./al-customers.component.css']
+  styleUrls: ['./al-customers.component.css'],
 })
 export class AlCustomersComponent implements OnInit, OnDestroy  {
 filtercustomer:string= "All";
@@ -36,13 +36,20 @@ isDetails:boolean = false
 keywordSearch:any;
 customerID:string = ""
 currentPage:number = 0;
-totalPages:number = 0;
+pageNumbers:Array<any> = [];
+categoryList:Array<any> = [];
 @ViewChild(CdkVirtualScrollViewport, { static: false }) viewPort: CdkVirtualScrollViewport;
-image:string = "https://liveapi.startasker.com//images/Customers/NYlLT1600410727105JPEG_20200918_143028_1044443140.jpg"
+image:string = "https://stagingapi.startasker.com//images/Customers/NYlLT1600410727105JPEG_20200918_143028_1044443140.jpg"
   constructor(private adminService:AdminService, private router:Router, private fb:FormBuilder,
     private snackBar:MatSnackBar, private activatedRoute: ActivatedRoute,private dialog:MatDialog) { }
 
   ngOnInit() {
+    let cat = JSON.parse(sessionStorage.getItem('categories'));
+    if(cat && cat.length){
+      this.categoryList = cat;
+    }else{
+      this.browseCategory();
+    }
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.keywordSearch = { ...params };
     });
@@ -60,10 +67,13 @@ image:string = "https://liveapi.startasker.com//images/Customers/NYlLT1600410727
       type : this.filtercustomer,
       "sortBy":this.filterOption,
       pageNo:""+this.pageNo,
-      size:"90"
+      size:"90",
+      State:"All",
+      category: "All"
     }
    this.fetchAllUsers()   
-    this.baseUrl = this.adminService.baseUrl;
+    // this.baseUrl = this.adminService.baseUrl;
+    this.baseUrl = "https://stagingapi.startasker.com"
     this.filterForm = this.fb.group({
       dateRange: [null]
     })
@@ -74,6 +84,24 @@ image:string = "https://liveapi.startasker.com//images/Customers/NYlLT1600410727
       duration: 3000
     });
   }
+  // Browse Category
+browseCategory(){
+  this.adminService.browseCategory().subscribe((posRes)=>{
+    if(posRes.response == 3){
+      this.categoryList = posRes.categoriesList;
+      sessionStorage.setItem('categories',JSON.stringify(this.categoryList))
+    }else{
+      this.openSnackBar(posRes.message,"")
+    }
+  },(err:HttpErrorResponse)=>{
+    if(err.error instanceof Error){
+      console.warn("CSE",err.message);
+    }else{
+      console.warn("SSE",err.message);
+      
+    }
+  })
+}
   searchByName(){
     if(this.searchByNameForm.valid){
       this.filterdCustomers = []
@@ -95,11 +123,15 @@ this.isSearchByName = true;
 let token = sessionStorage.getItem('token')
 this.adminService.searchByName(this.searchByNameForm.value,token).subscribe((posRes)=>{
   console.log("All Users",posRes);
+  this.pageNumbers = [];
   this.adminService.showLoader.next(false);
   this.message = "No Users Found.."
 if(posRes.response == 3){
 this.customers = posRes.FetchData;
-this.totalPageCount = posRes.pages
+this.totalPageCount = posRes.pages;
+for(let i:number = 0; i<this.totalPageCount; i++){
+  this.pageNumbers.push(i+1);
+}
 if(this.totalPageCount <= this.pageNo){
  this.isTotalCountReached = true;
 }else{
@@ -109,9 +141,11 @@ let parentElm = document.getElementById('main-wrap');
 //let  currentScrollPositio = parentElm.pageYOffset;
 let currentScrollPosition = parentElm.scrollTop;
 //console.log("Yposition",currentScrollPosition);
-this.filterdCustomers = this.filterdCustomers.concat(this.customers);
+this.filterdCustomers = this.customers;
+// this.filterdCustomers = this.filterdCustomers.concat(this.customers);
 this.isFetchingUsers = false;
-parentElm.scrollTop = currentScrollPosition
+parentElm.scrollTop= 0;
+// parentElm.scrollTop = currentScrollPosition
 // console.log("Yposition2",parentElm.scrollTop);
 //  parentElm.scrollTo(0,currentScrollPositio)
 }else{
@@ -165,8 +199,10 @@ this.isFetchingUsers = false;
   }
   taskFilters(){
     let obj = {
-      from : "AllCust"
+      from : "AllCust",
+      cat: this.categoryList
     }
+    this.pageNo = 1;
    let dialogRef = this.dialog.open(FiltersComponent,{
       panelClass:'col-md-4',
       hasBackdrop : true,
@@ -184,6 +220,14 @@ this.isFetchingUsers = false;
   }
   changeView(event){
   this.filtercustomer = event.value;
+  }
+  gotoSelectedPage(num){
+    this.pageNo = num;
+    if(!this.isSearchByName){
+      this.fetchAllUsers()
+    }else{
+      this.getUsersByName()
+    }
   }
   receiveMessage(event){
     this.isDetails = event;
@@ -207,21 +251,37 @@ this.isFetchingUsers = false;
      this.getUsersByName()
    }
  }
+ previousPage(){
+  this.pageNo = this.pageNo - 1;
+  if(this.totalPageCount <= this.pageNo){
+    this.isTotalCountReached = true;
+  }else{
+    this.isTotalCountReached = false;
+  }
+  if(!this.isSearchByName){
+   this.fetchAllUsers()
+  }else{
+    this.getUsersByName()
+  }
+ }
  fetchAllUsers(){
+   this.pageNumbers = [];
    this.message = "Finding Users.."
    this.isSearchByName = false;
    this.isFetchingUsers = true;
    this.customerObj.pageNo = ""+this.pageNo
    this.adminService.showLoader.next(true);
    let token = sessionStorage.getItem('token');
-   debugger;
    this.customerSubscribe = this.adminService.fetchAllCustomers(this.customerObj,token).subscribe((posRes)=>{
      console.log("All Users",posRes);
      this.message = "No Users Found.."
      this.adminService.showLoader.next(false);
 if(posRes.response == 3){
   this.customers = posRes.FetchData;
-  this.totalPageCount = posRes.pages
+  this.totalPageCount = posRes.pages;
+  for(let i:number = 0; i<this.totalPageCount; i++){
+    this.pageNumbers.push(i+1);
+  }
   if(this.totalPageCount <= this.pageNo){
     this.isTotalCountReached = true;
   }else{
@@ -231,9 +291,11 @@ if(posRes.response == 3){
  //let  currentScrollPositio = parentElm.pageYOffset;
 let currentScrollPosition = parentElm.scrollTop;
 //console.log("Yposition",currentScrollPosition);
-  this.filterdCustomers = this.filterdCustomers.concat(this.customers);
+  // this.filterdCustomers = this.filterdCustomers.concat(this.customers);
+  this.filterdCustomers = this.customers
   this.isFetchingUsers = false;
-  parentElm.scrollTop = currentScrollPosition;
+  //  parentElm.scrollTop = currentScrollPosition;
+   parentElm.scrollTop = 0;
 }else{
   this.openSnackBar(posRes.message,"");
   this.pageNo = this.pageNo -1;

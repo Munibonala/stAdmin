@@ -24,8 +24,10 @@ bsInlineValue = new Date();
   maxDate = new Date();
 taskStatus:string = "All"
   date = null;
+  statesArray:Array<any> = ["All","Sabah", "Sarawak", "Selangor", "Perak", "Johor", "Kedah","Negeri Sembilan", "Pahang", "Terengganu", "Penang", "Perlis", "Maleka", "Kuala Lumpur"]
   customerDetailsLink:string = "";
-  bookingStatus:string = "All"
+  bookingStatus:string = "All";
+  stateName:string = "All"
   @ViewChild('t',{static:false}) datePicker: NgbInputDatepicker;
   hoveredDate: NgbDate | null = null;
 
@@ -61,6 +63,9 @@ taskStatus:string = "All"
     }else{ 
     }
   }
+  selectState(state){
+    this.stateName = state;
+  }
   bookingFilter(status){
     this.bookingStatus = status
   }
@@ -80,7 +85,8 @@ getFilteredReport1(){
   let obj = {
     reportType:"Customer",
     fromDate:""+ frmDate,
-    toDate:""+ toDate
+    toDate:""+ toDate,
+    State: this.stateName
   }
   this.fileName = "customerReport.csv";
   this.getReports(obj);
@@ -95,7 +101,8 @@ getproviderDetails(){
   let obj = {
     reportType:"Provider",
     fromDate:""+ frmDate,
-    toDate:""+ toDate
+    toDate:""+ toDate,
+    State: this.stateName
   }
   this.fileName = new Date(this.providerForm.value.dateRange[0]).toLocaleDateString()+"-"+new Date(this.providerForm.value.dateRange[1]).toLocaleDateString()+"providerReport.csv";
   this.getReports(obj)
@@ -109,7 +116,8 @@ getBookings(){
     reportType:"Bookings",
     reportStatus:this.bookingStatus,
     fromDate:""+ frmDate,
-    toDate:""+ toDate
+    toDate:""+ toDate,
+    State: this.stateName
   }
   this.fileName = "bookingsReport.csv";
   this.getReports(obj)
@@ -123,7 +131,8 @@ getReferrals(){
   let obj = {
     reportType:"Referral",
     fromDate:""+ frmDate,
-    toDate:""+ toDate
+    toDate:""+ toDate,
+    State: "All"
   }
   this.fileName = "referralReport.csv";
   this.getReports(obj)

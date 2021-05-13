@@ -1,4 +1,7 @@
 <div class="p-3 shadow">
+    <div class="position-absolute hover" *ngIf="isFromAllBookings" style="top: 0;left: 0;" (click)="closeDetails()">
+        <img src="../../../assets/criss_cross.png" width="24">
+    </div>
     <h4 >Details </h4>
 </div>
 <div class="container mt-3 scroll" style="max-height: 80vh; overflow-y: auto;" *ngIf="rawData && rawData.taskTitle ">

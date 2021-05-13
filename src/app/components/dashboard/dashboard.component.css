@@ -6,6 +6,7 @@ mat-card:not(.canvas):hover{
 .nav-item{
     cursor: pointer;
   }
+  
 .active{
     background-color: #faf1f1;
     color: #ff5252 !important;

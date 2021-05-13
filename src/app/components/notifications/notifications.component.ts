@@ -46,7 +46,7 @@ export class NotificationsComponent implements OnInit {
       if(posRes.response == 3){
         this.sentNotifications = posRes.notificationData.sentInbox.reverse();
         this.receivedNotification = posRes.notificationData.recievedInbox.reverse();
-        console.log("receivedNotification",this.receivedNotification);
+       
         
       }else{
         this.openSnackBar(posRes.message,"");

@@ -58,7 +58,7 @@
                                         <small><b>Attachments</b></small><br>
                                         <span class="hover"
                                             *ngFor="let attachments of rawData.attachments">
-                                            <img src="{{baseUrl+attachments}}" width="30">
+                                            <img src="{{baseUrl+attachments}}" width="30" (click)="showGallery()">
                                         </span>
                                     </span>
                                 </li>
@@ -114,7 +114,7 @@
             </div>
             <div class="row" *ngIf="assigned && assigned.length">
                 <div class="col-md-6 p-0" *ngFor="let offer of assigned">
-                    <ul class="list-unstyled " >
+                    <ul class="list-unstyled ">
                         <li class="d-flex">
                             <span>
                                 <img src="{{baseUrl+offer.authorProfilePic}}" width="70" height="70"  class="rounded-circle  shadow">
@@ -127,9 +127,31 @@
                         </li></ul>
                 </div>
             </div>
+            <div class="row" *ngIf="offers && offers.length">
+                <div class="bg-light p-1 pl-3 col-md-12" >
+                    Offers
+            </div>
+                <div class="col-md-6 p-0" *ngFor="let offer of offers; let i = index;">
+                    <ul class="list-unstyled " >
+                        <li class="d-flex">
+                            <span class="position-relative">
+                                <img src="{{baseUrl+offer.authorProfilePic}}" width="70" height="70"  class="rounded-circle  shadow">
+                                <div class="delete-icon hover" (click)="deleteOffers(offer,i)">
+                                    <img src="../../../assets/criss_cross.png" width="20"  matTooltip="Delete Offer">
+                                </div>
+                            </span>
+                            <span class=" align-self-center">
+                                <b>{{offer.authorName}}</b><br>
+                                <small class="f-14">RM {{offer.budget}}</small><br>
+                                <small class="f-14 hover view-chat" (click)="openPrivateChat(offer)">View Chat </small>
+                            </span>
+                            
+                        </li></ul>
+                </div>
+            </div>
             <div class="row justify-content-center flex-column mx-4">
                 <button mat-raised-button class="btn-bg m-2" (click)="openComments()">View All Comments</button>
-                <button mat-raised-button class="btn-bg m-2" (click)="openOffers()">View All Offers</button>
+                <button mat-raised-button class="btn-bg m-2" *ngIf="rawData.post_Status == 'Open'" (click)="openOffers()">Hire Providers</button>
             </div>
             
             </div>

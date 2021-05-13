@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
@@ -7,10 +7,11 @@ import { AdminService } from 'src/app/admin.service';
 import { DeleteDailogComponent } from '../delete-dailog/delete-dailog.component';
 import {NgbDate, NgbCalendar, NgbDateParserFormatter, NgbInputDatepicker} from '@ng-bootstrap/ng-bootstrap';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { FiltersComponent } from '../filters/filters.component';
 @Component({
   selector: 'app-all-tasks-list',
   templateUrl: './all-tasks-list.component.html',
-  styleUrls: ['./all-tasks-list.component.css']
+  styleUrls: ['./all-tasks-list.component.css'],
 })
 export class AllTasksListComponent implements OnInit {
   filteredData:Array<any> = [];
@@ -28,6 +29,7 @@ debounceTime = null;
 isDetails:boolean = false;
 taskID:string = "";
 jobObj:any
+pageNumbers:Array<any> = []
   @ViewChild('t',{static:false}) datePicker: NgbInputDatepicker;
   @ViewChild ("scroll",{static: false}) scrollContainer:ElementRef;
   @ViewChild(CdkVirtualScrollViewport, { static: false }) viewPort: CdkVirtualScrollViewport;
@@ -44,7 +46,8 @@ jobObj:any
     this.jobObj = {
       taskStatus : this.taskStatus,
       pageNo:""+this.pageNo,
-      size:"20"
+      size:"30",
+      State: "All"
     }
     this.filterForm = this.fb.group({
       dateRange:[null,Validators.required]
@@ -80,18 +83,10 @@ jobObj:any
     }
   }
   getFilteredTask(){
-    console.log(this.filterForm.value.dateRange);
-    
     if(this.filterForm.value.dateRange != null){
       let frmDate = new Date(this.filterForm.value.dateRange[0]).setHours(0,0,0);
       let toDate = new Date(this.filterForm.value.dateRange[1]).setHours(23,59,59,999);
       console.log(new Date(frmDate),new Date(toDate));
-      
-      // if(new Date(this.filterForm.value.dateRange[0]).getTime() === new Date(this.filterForm.value.dateRange[1]).getTime()){
-        
-      // }
-      // frmDate = new Date(new Date(frmDate).toLocaleDateString()).getTime();
-      //   toDate = new Date(new Date(toDate).toLocaleDateString()).getTime() + 86399900;
       this.filteredData = [];
       this.pageNo = 1;
       this.jobObj = {
@@ -172,6 +167,25 @@ jobObj:any
   tasksFilter(type){
     this.taskStatus = type
   }
+  taskFilters(){
+    let obj = {
+      from : "AllTasks"
+    }
+    this.pageNo = 1
+   let dialogRef = this.dialog.open(FiltersComponent,{
+      panelClass:'col-md-4',
+      hasBackdrop : true,
+      disableClose: true,
+      data : obj
+    })
+    dialogRef.afterClosed().subscribe(res=>{
+      if(res && res.pageNo){
+        this.filteredData = [];
+        this.jobObj = res;
+        this.getJobs()
+      }
+    })
+  }
   deleteTask(data,i){
     let message = `Do you want to delete ${data.postTitle} task.` 
     let dailogRef = this.dialog.open(DeleteDailogComponent, {
@@ -219,6 +233,7 @@ jobObj:any
   }
  
   getJobs(){
+    this.pageNumbers = [];
     this.adminService.showLoader.next(true);
     this.dataMessage ="Fetching Data..."
    this.jobObj.pageNo = ""+ this.pageNo;
@@ -232,6 +247,9 @@ jobObj:any
         this.jobs = posRes.jobsData;
         this.jobsCopy = posRes.jobsData;
         this.totalPageCount = posRes.pages;
+        for(let i:number = 0; i<this.totalPageCount; i++){
+          this.pageNumbers.push(i+1);
+        }
         sessionStorage.setItem('allJobs',JSON.stringify(this.jobs))
         this.jobs.forEach((val,i)=>{
           // this.jobs.taskDate = new Date(parseFloat(val.taskDate));
@@ -241,9 +259,7 @@ jobObj:any
             this.jobs[i].budget.budget = num * val.budget.pricePerHour;
           }
         })
-        this.filteredData = this.filteredData.concat(this.jobs);
-        this.cd.detectChanges()
-        let num = this.pageNo * 20
+        this.filteredData = this.jobs;
         // this.viewPort.scrollToIndex(num -20,'smooth')
       }else{
   this.openSnackBar(posRes.message,"");
@@ -258,6 +274,18 @@ jobObj:any
         console.warn("SSError",err.error)
       }
     })
+  }
+  previousPage(){
+    this.pageNo -= 1;
+    this.getJobs();
+  }
+  nextPage(){
+    this.pageNo += 1;
+    this.getJobs();
+  }
+  gotoSelectedPage(number){
+    this.pageNo = number;
+    this.getJobs();
   }
   showDate(event){
     console.log(event);   

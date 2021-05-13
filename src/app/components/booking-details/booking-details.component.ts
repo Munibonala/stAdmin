@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from 'src/app/admin.service';
@@ -29,6 +29,9 @@ export class BookingDetailsComponent implements OnInit {
   totalAmount:number = 0;
   isCouponApplied:boolean = false;
   taskTotal:number = 0;
+  isFromAllBookings:boolean = false;
+  @Input() childID: string;
+  @Output() closeEvent = new EventEmitter();
   constructor(private adminService:AdminService,private router:Router, private activatedRoute:ActivatedRoute,
     private snackBar:MatSnackBar) { }
 
@@ -40,7 +43,15 @@ export class BookingDetailsComponent implements OnInit {
       this.getTaskDetails()
    }); 
   }
-
+  ngOnChanges(changes: SimpleChanges){
+    this.id = this.childID;
+    this.isFromAllBookings = true
+    this.getTaskDetails();
+  }
+  closeDetails(){
+    this.isFromAllBookings = false;
+    this.closeEvent.emit(true)
+  }
   getColors(status){
     switch (status){
       case "Open":

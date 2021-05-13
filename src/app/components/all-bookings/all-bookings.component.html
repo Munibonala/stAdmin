@@ -1,6 +1,6 @@
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="!isDetailsPage">
 <div class="row">
-    <div class="col-md-12 bg-light d-flex justify-content-between p-3">
+    <div class="col-md-12 d-flex justify-content-between p-3">
         <h4 class="align-self-center">All Bookings</h4>
         <form class="example-form align-self-center" >
             <div class="form-group has-search">
@@ -10,8 +10,30 @@
             
           </form>
     </div>
+    <div class="col-md-12 d-flex  bg-light p-2  justify-content-between">
+        <div class=" p-2">
+            <span class="f-18 hover p-2" style="font-weight: 600;" (click)="bookingFilters()">Add Filters <span> <img src="../../../assets/sort.png"> </span></span>
+             
+         </div>
+         <div class="align-self-center d-flex justify-content-between" >
+           <div class="mr-2">
+            <button mat-raised-button class="f-14 small" [matMenuTriggerFor]="menu">Page {{pageNo}} of {{totalPageCount}}</button>
+            <mat-menu #menu="matMenu" class="mobile-menu" [overlapTrigger]="false" >
+                <a mat-menu-item  class="text-decoration-none header-text" [ngClass]="{'disabled': num === pageNo}" *ngFor="let num of pageNumbers;" (click)="gotoSelectedPage(num)">
+                    {{num}}
+              </a>
+              </mat-menu>
+           </div>
+              <div>
+                <mat-button-toggle-group appearance="legacy" class="bg-white text-dark" name="fontStyle" aria-label="Font Style">
+                    <mat-button-toggle class="text-dark small" (click)="previousPage()" [ngClass]="{'disabled':pageNo == 1}" value="bold">Prev</mat-button-toggle>
+                    <mat-button-toggle class="text-dark small" (click)="nextPage()" [ngClass]="{'disabled':pageNo == totalPageCount}" value="underline">Next</mat-button-toggle>
+                  </mat-button-toggle-group>
+              </div>
+        </div>
+    </div>
 </div>
-<div class="row p-2 mt-2 bg-light">
+<!-- <div class="row p-2 mt-2 bg-light">
     <form class="form-inline" [formGroup]="filterForm">
    
        <div class="input-group">
@@ -49,13 +71,13 @@
    </a>
        </mat-menu>
        
- </div>
+ </div> -->
     <div class="row " >
-        <div *ngIf="filteredData && filteredData.length"  class="col-md-12 p-0 ">
+        <div *ngIf="filteredData && filteredData.length"  class="col-md-12 p-0">
             <div class="list-group mr-3 pt-1">
-                <cdk-virtual-scroll-viewport itemSize="20" (scrolledIndexChange)='onScrollEnd()' style="overflow-y: scroll;max-height: 75vh; " class="scroll">
+                <div style="overflow-y: scroll;max-height: 75vh; " class="scroll">
                     <a class="list-group-item hover   list-group-item-action "
-                    *cdkVirtualFor="let jobs of filteredData ; let i = index;" (click)="openDetails(jobs)">
+                    *ngFor="let jobs of filteredData ; let i = index;" (click)="openDetails(jobs)">
                     <div class="d-flex  px-2 justify-content-start" style="font-size: 14px; font-weight: 500;">
                         <div class=" px-3">
                             <img *ngIf="jobs.customerProfilePic != ''" src="{{baseUrl+jobs.customerProfilePic}}" width="60" height="60" style="border-radius: 50%;">
@@ -105,7 +127,7 @@
                         </div>
                     </div>
                 </a>
-                </cdk-virtual-scroll-viewport>
+            </div>
                 
             </div>
         </div>
@@ -113,4 +135,7 @@
             <h5 class="align-self-center">{{apiStatus}}</h5>
         </div>
     </div>
+</div>
+<div *ngIf="isDetailsPage">
+    <app-booking-details [childID]="bookingID" (closeEvent)="receiveMessage($event)"></app-booking-details>
 </div>

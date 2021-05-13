@@ -5,6 +5,7 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { AdminService } from 'src/app/admin.service';
 import { AccountVerificationModalComponent } from '../account-verification-modal/account-verification-modal.component';
+import { ImgPreviewComponent } from '../img-preview/img-preview.component';
 import { ReviewModalComponent } from '../review-modal/review-modal.component';
 
 @Component({
@@ -15,7 +16,7 @@ import { ReviewModalComponent } from '../review-modal/review-modal.component';
 export class CustomerDetailsComponent implements OnInit , OnChanges {
   asPoster:boolean = false;
   asTasker:boolean = false;
-  image:string = "https://liveapi.startasker.com//images/Customers/oPJpQ1600825844027JPEG_20200923_095041_1007186395530940084.jpg";
+  image:string = "https://stagingapi.startasker.com//images/Customers/oPJpQ1600825844027JPEG_20200923_095041_1007186395530940084.jpg";
   UserDetails:any;
   id:any;
   routeSub:any;
@@ -39,6 +40,7 @@ export class CustomerDetailsComponent implements OnInit , OnChanges {
   };
   isUpdatePhone:boolean = false;
   isUserBlocked:boolean = false;
+  galleryImages:Array<any> = []
   @Input() childID: string;
   @Output() closeEvent = new EventEmitter();
   constructor(private adminService:AdminService, private activatedRoute:ActivatedRoute, private fb:FormBuilder,
@@ -61,6 +63,19 @@ export class CustomerDetailsComponent implements OnInit , OnChanges {
       this.fetchData()
     }
    });
+  }
+  openGallery(){
+    let data = {
+      isFromGallery : true,
+      images : this.gallery
+    }
+    let dialogRef = this.dialog.open(ImgPreviewComponent,{
+      panelClass: 'col-md-4',
+      hasBackdrop: true,
+      disableClose:false,
+      width :'40rem',
+      data : data
+    })
   }
   closeDetails(){
     this.isFromAllCustomers = false;
@@ -175,6 +190,30 @@ export class CustomerDetailsComponent implements OnInit , OnChanges {
       }
     })
     
+  }
+  showGallery(){
+    let data = {
+      isFromGallery : false,
+      images : this.galleryImages
+    }
+    let dialogRef = this.dialog.open(ImgPreviewComponent,{
+      panelClass: 'col-md-4',
+      hasBackdrop: true,
+      disableClose:false,
+      width :'40rem',
+      data : data
+    })
+  }
+  showIdProof(img1,img2){
+    this.galleryImages = [];
+    this.galleryImages.push(this.baseUrl+img1);
+    this.galleryImages.push(this.baseUrl+img2);
+    this.showGallery()
+  }
+  dpPreview(img){
+    this.galleryImages = [];
+    this.galleryImages.push(img);
+    this.showGallery()
   }
   viewReviews(){
     let obj = {

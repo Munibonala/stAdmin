@@ -11,9 +11,8 @@ export class AdminComponent implements OnInit {
   isdetailsPage:boolean = false;
   isSideNavOpen:boolean = false;
   constructor(private adminService:AdminService, private router:Router) {
-
+    
    }
-
   ngOnInit() {
     let token = sessionStorage.getItem('token');
     if(token == null){

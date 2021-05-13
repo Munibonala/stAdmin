@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit {
     });
   }
   submitDetails(){
+   if(this.loginForm.valid){
     this.loading = true;
     this.adminService.adminLogin(this.loginForm.value).subscribe((posRes:any)=>{
       this.loading = false;
@@ -39,7 +40,6 @@ export class LoginComponent implements OnInit {
       }else{
         this.openSnackBar(posRes.message,"")
       }
-      debugger;
     },(err:HttpErrorResponse)=>{
       this.loading = false;
       this.openSnackBar(err.message,"")
@@ -49,5 +49,8 @@ export class LoginComponent implements OnInit {
         console.warn("Server Error",err.error)
       }
     })
+   }else{
+     this.openSnackBar("Enter Valid User ID/Password","")
+   }
   }
 }

@@ -6,7 +6,9 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatInputModule, MatButtonModule, MatIconModule, MatStepperModule, MatDialogModule, 
-  MatMenuModule, MatDatepickerModule, MatNativeDateModule, MatRippleModule, MatButtonToggleModule, MatCheckboxModule, MatSnackBarModule, MatSelectModule, MatAutocompleteModule, MatChipsModule, MatCardModule} from '@angular/material'
+  MatMenuModule, MatDatepickerModule, MatNativeDateModule, MatRippleModule, MatButtonToggleModule,
+   MatCheckboxModule, MatSnackBarModule, MatSelectModule, MatAutocompleteModule, MatChipsModule,MatTooltipModule,
+    MatCardModule} from '@angular/material'
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ChartsModule, ThemeService } from 'ng2-charts';
 import { AdminComponent } from './components/admin/admin.component';
@@ -35,6 +37,10 @@ import { ReferralsComponent } from './components/referrals/referrals.component';
 import { UserRefferalDailogComponent } from './components/user-refferal-dailog/user-refferal-dailog.component';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { FiltersComponent } from './components/filters/filters.component';
+import { ImgPreviewComponent } from './components/img-preview/img-preview.component';
+import { HireProvidersComponent } from './components/hire-providers/hire-providers.component';
+import { CouponComponent } from './components/coupon/coupon.component';
+import { BnNgIdleService } from 'bn-ng-idle';
 
 
 @NgModule({
@@ -60,11 +66,14 @@ import { FiltersComponent } from './components/filters/filters.component';
     ReportsComponent,
     ReferralsComponent,
     UserRefferalDailogComponent,
-    FiltersComponent
+    FiltersComponent,
+    ImgPreviewComponent,
+    HireProvidersComponent,
+    CouponComponent
   ],
   entryComponents:[DeleteDailogComponent,CommentsDailogComponent,OffersDailogComponent,
     ReviewModalComponent,AccountVerificationModalComponent,SendNotificationsDailogComponent,
-    UserRefferalDailogComponent,FiltersComponent],
+    UserRefferalDailogComponent,FiltersComponent,ImgPreviewComponent,HireProvidersComponent,CouponComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -84,6 +93,7 @@ import { FiltersComponent } from './components/filters/filters.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatRippleModule,
+    MatTooltipModule,
     MatCardModule,
     MatSnackBarModule,
     MatButtonToggleModule,
@@ -95,7 +105,7 @@ import { FiltersComponent } from './components/filters/filters.component';
     BsDatepickerModule.forRoot(),
     ChartsModule
   ],
-  providers: [BsDatepickerConfig,BsDaterangepickerConfig,ThemeService,
+  providers: [BsDatepickerConfig,BsDaterangepickerConfig,ThemeService,BnNgIdleService,
     {
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { displayDefaultIndicatorType: false }

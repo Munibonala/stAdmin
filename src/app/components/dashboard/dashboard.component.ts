@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
             display: true,
           },
           gridLines: {
-            color: "rgba(0, 0, 0,.5)"
+            color: "rgba(0, 0, 0,0)"
           }
         }
       ],
@@ -51,9 +51,10 @@ export class DashboardComponent implements OnInit {
           ticks: {
             display: true,
             beginAtZero: true,
+            stepSize :1
           },
           gridLines: {
-            color: "rgba(0, 0, 0,.5)"
+            color: "rgba(0, 0, 0,0)"
           }
         }
       ]

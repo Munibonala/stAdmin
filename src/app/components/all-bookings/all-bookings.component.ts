@@ -1,10 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminService } from 'src/app/admin.service';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { FiltersComponent } from '../filters/filters.component';
 
 @Component({
   selector: 'app-all-bookings',
@@ -22,16 +23,20 @@ export class AllBookingsComponent implements OnInit {
   totalPageCount:number = 0;
   filterForm:FormGroup;
 debounceTime = null;
-taskStatus:string = "All"
+bookingID:string = "";
+isDetailsPage:boolean = false;
+taskStatus:string = "All";
+pageNumbers:Array<any> = [];
 @ViewChild(CdkVirtualScrollViewport, { static: false }) viewPort: CdkVirtualScrollViewport;
   constructor(private adminService:AdminService,private router:Router,private fb:FormBuilder,
-    private  cd: ChangeDetectorRef, private snackBar:MatSnackBar) { }
+    private  cd: ChangeDetectorRef, private snackBar:MatSnackBar, private dialog:MatDialog) { }
 
   ngOnInit() {
     this.jobObj = {
       "type":this.taskStatus,
       "pageNo":""+ this.pageNo,
       "size":"20",
+      State:"All"
      }
      this.filterForm = this.fb.group({
        dateRange: [null]
@@ -47,6 +52,9 @@ taskStatus:string = "All"
         case false: return '#FF870E';
         
     }
+  }
+  receiveMessage(event){
+    this.isDetailsPage = false;
   }
   tasksFilter(type){
     this.taskStatus = type;
@@ -83,6 +91,7 @@ taskStatus:string = "All"
     });
   }
   getJobs(){
+    this.pageNumbers = []
     this.jobObj.pageNo = ""+this.pageNo
 let token = sessionStorage.getItem('token');
 this.adminService.showLoader.next(true);
@@ -95,12 +104,15 @@ this.adminService.showLoader.next(true);
         
         this.jobs = posRes.FetchData;
         this.totalPageCount = posRes.pages;
+        for(let i:number = 0; i<this.totalPageCount; i++){
+          this.pageNumbers.push(i+1);
+        }
         this.jobs.forEach((val,i)=>{
           // this.jobs.taskDate = new Date(parseFloat(val.taskDate));
           this.jobs[i].postedDate = new Date(val.postedDate * 1);
         })
-        this.filteredData = this.filteredData.concat(this.jobs);
-        this.cd.detectChanges();
+        this.filteredData = this.jobs;
+        // this.cd.detectChanges();
         this.adminService.showLoader.next(false);
       }else{
         this.adminService.showLoader.next(false);
@@ -114,6 +126,18 @@ this.adminService.showLoader.next(true);
         console.warn("SSError",err.error)
       }
     })
+  }
+  previousPage(){
+    this.pageNo -= 1;
+    this.getJobs();
+  }
+  nextPage(){
+    this.pageNo += 1;
+    this.getJobs();
+  }
+  gotoSelectedPage(number){
+    this.pageNo = number;
+    this.getJobs()
   }
   // Vertual Scroll pagination
   onScrollEnd(){
@@ -137,9 +161,30 @@ this.adminService.showLoader.next(true);
     }
   }
   openDetails(job){
-this.router.navigate(['admin','booking',job.bookingID])
+    this.isDetailsPage = true;
+    this.bookingID = job.bookingID
+   
+//  this.router.navigate(['admin','booking',job.bookingID])
   }
-  
+  bookingFilters(){
+    let obj = {
+      from : "AllBookings"
+    }
+    this.pageNo = 1
+   let dialogRef = this.dialog.open(FiltersComponent,{
+      panelClass:'col-md-4',
+      hasBackdrop : true,
+      disableClose: true,
+      data : obj
+    })
+    dialogRef.afterClosed().subscribe(res=>{
+      if(res && res.pageNo){
+        this.filteredData = [];
+        this.jobObj = res;
+        this.getJobs()
+      }
+    })
+  }
   applyFilter(term: string) {
     if(!term) {
       this.filteredData = this.jobs;
