@@ -7,6 +7,7 @@ import { AdminService } from 'src/app/admin.service';
 import { AccountVerificationModalComponent } from '../account-verification-modal/account-verification-modal.component';
 import { ImgPreviewComponent } from '../img-preview/img-preview.component';
 import { ReviewModalComponent } from '../review-modal/review-modal.component';
+import { ShowOfferedJobsComponent } from '../show-offered-jobs/show-offered-jobs.component';
 
 @Component({
   selector: 'app-customer-details',
@@ -81,6 +82,7 @@ export class CustomerDetailsComponent implements OnInit , OnChanges {
     this.isFromAllCustomers = false;
     this.closeEvent.emit(false);
   }
+  
   blockOrUnBlock(){
     let obj = {
       customerID : this.UserDetails.userID,
@@ -93,6 +95,9 @@ export class CustomerDetailsComponent implements OnInit , OnChanges {
         this.adminService.showLoader.next(false);
         this.openSnackBar(posRes.message,"");
         this.isUserBlocked = !this.isUserBlocked;
+        // if(this.isUserBlocked){
+        //   this.fetchUserOfferedJobs();
+        // }
       }else{
         this.openSnackBar(posRes.message,"")
       }
@@ -104,6 +109,37 @@ export class CustomerDetailsComponent implements OnInit , OnChanges {
       }else{
         console.warn("Server Side Error",err.error);
       }
+    })
+  }
+  fetchUserOfferedJobs(){
+    let token = sessionStorage.getItem('token');
+    let obj = {
+      userID : this.UserDetails.userID
+    }
+   this.adminService.getMyOfferedTasks(obj,token).subscribe((posRes)=>{
+     if(posRes.response == 3){
+       let data = {
+         userID: this.UserDetails.userID,
+         jobsData: posRes.jobsData
+       }
+       this.showOfferedJobs(data);
+     }
+   },(err:HttpErrorResponse)=>{
+    this.adminService.showLoader.next(false);
+    this.openSnackBar(err.message,"");
+    if(err.error instanceof Error){
+      console.warn("Client Side Error",err.error);
+    }else{
+      console.warn("Server Side Error",err.error);
+    }
+  })
+  }
+  showOfferedJobs(data){
+    let dailogRef = this.dialog.open(ShowOfferedJobsComponent,{
+      panelClass:'col-md-4',
+      disableClose:true,
+      hasBackdrop:true,
+      data: data
     })
   }
   fetchData() {

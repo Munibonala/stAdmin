@@ -41,6 +41,7 @@ import { ImgPreviewComponent } from './components/img-preview/img-preview.compon
 import { HireProvidersComponent } from './components/hire-providers/hire-providers.component';
 import { CouponComponent } from './components/coupon/coupon.component';
 import { BnNgIdleService } from 'bn-ng-idle';
+import { ShowOfferedJobsComponent } from './components/show-offered-jobs/show-offered-jobs.component';
 
 
 @NgModule({
@@ -69,11 +70,13 @@ import { BnNgIdleService } from 'bn-ng-idle';
     FiltersComponent,
     ImgPreviewComponent,
     HireProvidersComponent,
-    CouponComponent
+    CouponComponent,
+    ShowOfferedJobsComponent
   ],
   entryComponents:[DeleteDailogComponent,CommentsDailogComponent,OffersDailogComponent,
     ReviewModalComponent,AccountVerificationModalComponent,SendNotificationsDailogComponent,
-    UserRefferalDailogComponent,FiltersComponent,ImgPreviewComponent,HireProvidersComponent,CouponComponent],
+    UserRefferalDailogComponent,FiltersComponent,ImgPreviewComponent,HireProvidersComponent,
+    CouponComponent,ShowOfferedJobsComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

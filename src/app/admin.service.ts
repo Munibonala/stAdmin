@@ -42,6 +42,13 @@ export class AdminService {
   getMyTasks(data):Observable<any>{
     return this.http.post("https://stagingapi.startasker.com/api/postjob/get",data) 
    }
+   getTasksBySearch(data,token):Observable<any>{
+     return this.http.post(`${this.baseUrl}/api/admin/postjob_search`,data,{headers:{"startasker":token}})
+   }
+   getBookingsBySearch(data,token):Observable<any>{
+    return this.http.post(`${this.baseUrl}/api/admin/bookings_search`,data,{headers:{"startasker":token}})
+  
+   }
    deleteTask(data,token){
     return this.http.post(`${this.baseUrl}/api/admin/deletetask`,data,{headers:{"startasker":token}})
    }
@@ -89,6 +96,8 @@ return this.http.post(`${this.baseUrl}/api/admin/deletecomment`,data,{headers:{"
           blockUnBlock(data,token):Observable<any>{
             return this.http.post("https://stagingapi.startasker.com/api/admin/blockOrUnblock",data,{headers:{"startasker":token}})
           }
+          getMyOfferedTasks(data,token):Observable<any>{
+            return this.http.post(`${this.baseUrl}/api/offers/getOfferedPosts`,data,{headers:{"startasker":token}})  }
           // Account verification
           verifyCustomer(data,token):Observable<any>{
             return this.http.post("https://stagingapi.startasker.com/api/admin/verification",data,{headers:{"startasker":token}})

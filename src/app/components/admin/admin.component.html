@@ -33,7 +33,7 @@
                                 <li (click)="openSideNav()">
                                     <a routerLinkActive="active" [routerLink]="['/admin/notifications']"
                                         class="hover "> Notifications</a></li>
-                                        <li (click)="openSideNav()">
+                                        <li (click)="openSideNav()" *ngIf="isMainAdmin">
                                             <a routerLinkActive="active" [routerLink]="['/admin/reports']"
                                                 class="hover "> Reports</a></li>
                                 <li (click)="openSideNav()">

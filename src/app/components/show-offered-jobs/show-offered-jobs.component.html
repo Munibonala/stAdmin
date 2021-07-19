@@ -1,0 +1,106 @@
+<div class="text-center bg-light p-3">
+    <h5 class="">
+        User Offered Jobs <span class="float-right hover text-right" (click)="closeTab()">
+            <img width="40" style="border-radius: 50%; padding: 10px;" src="../../../assets/cancel.png">
+        </span></h5>
+</div>
+<div class="container-fluid" >
+    <!-- <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th scope="col">
+                    S.No
+                </th>
+                <th scope="col">Post Name</th>
+                <th scope="col">Post ID</th>
+                <th scope="col">Posted By</th>
+                <th scope="col">Posted Date</th>
+                 <th scope="col">Options</th>
+            </tr>
+            <tr *ngFor="let job of jobs;let i = index;">
+                <td>{{i+1}}</td>
+                <td>{{job.postTitle}}</td>
+                <td>{{job.postID}}</td>
+                <td>{{job.userInfo.firstName}} {{job.userInfo.lastName}}</td>
+                <td>{{job.postedDate | date:'dd/MM/yyyy'}}</td>
+              
+                <td>
+                    <span></span>
+                </td>
+            </tr>
+        </table>
+    </div> -->
+    <div class="list-group mr-3 pt-1">
+        <div #scroll  class="scroll custom-height" *ngIf="offeredJobs && offeredJobs.length">
+          <a  class="list-group-item hover   list-group-item-action"
+          *ngFor="let jobs of offeredJobs ; let i = index; last as isLast" [ngClass]="{'mb-5': isLast}" >
+          <div class="d-flex  px-1 justify-content-start" style="font-size: 14px; font-weight: 500;">
+              <div class="pl-0 pr-2">
+                  <img *ngIf="jobs.userInfo.profilePic != ''" src="{{'https://stagingapi.startasker.com/'+jobs.userInfo.profilePic}}" width="60" height="60" style="border-radius: 50%;">
+                  <br>
+                  <span class="font-weight-bold text-nowrap small">RM
+                    {{jobs.budget.budget}}</span>
+              </div>
+              <div class=" pl-1 flex-fill">
+                  <div class="my-1 d-flex" style="font-weight: 600;">
+                      <span class="px-2">{{jobs.postTitle}}</span>
+                      <span style=" flex: 1 1 auto;"></span>
+                      
+                  </div>
+                  <ul class="list-unstyled " (click)="openDetails(jobs)">
+                      <li class="d-flex justify-content-start" >
+                          <span>
+                              <img src="../../../assets/Icon-material-location-on.png"
+                              class="d-inline-block" width="13">
+                          </span>
+                          <span class="text-justify address pl-2" style="font-weight: 500; width: 150px !important;overflow: hidden; text-overflow: ellipsis;white-space: nowrap;">
+                              <small *ngIf="!jobs.canThisTaskRemote">{{jobs.location}}</small>
+                              <small *ngIf="jobs.canThisTaskRemote">Remote Task</small>
+                          </span>
+                      </li>
+                      <li class="d-flex">
+                          <span>
+                              <img src="../../../assets/calendar.png" width="13">
+                          </span>
+                          <span class="m-0 p-0 pl-2" >
+                              <!-- <small *ngFor="let dates of jobs.taskDate" class="m-0">{{+dates | date}},</small> -->
+                              <small class="m-0">{{jobs.postedDate | date}}</small>
+                          </span>
+                      </li>
+                      <li class="d-flex">
+                          <span>
+                              <img src="../../../assets/clock.png" width="13">
+                          </span>
+                          <span class="pl-2">
+                              <small *ngIf="jobs.convenientTimings.length == 0 || jobs.convenientTimings.length == 4">Any Time </small>
+                              <span style="margin: 0 !important;" *ngIf="jobs && jobs.convenientTimings.length && jobs.convenientTimings.length <= 3">
+                                  <small *ngFor="let timings of jobs.convenientTimings">{{timings}}, </small>
+                              </span>
+                      </span>
+                      <span style="flex: 1 1 auto;" (click)="openDetails(jobs)"></span>
+                      <span [ngStyle]="{'color' : getColors(jobs.post_Status)}" style="font-size: 0.8rem !important;font-weight: 600;">{{jobs.post_Status}}</span>
+                      </li>
+                  </ul>
+                  
+              </div>
+              <div class="d-flex flex-column justify-content-between px-2 mb-2 bg-light">
+                  <div class="pt-1" (click)="withdrawUser(jobs,i)" #tooltip="matTooltip"
+                  matTooltip="Remove user from offers"
+                  matTooltipPosition="above"
+                  matTooltipHideDelay="1000">
+                      <mat-icon>delete</mat-icon>
+                  </div>
+                  <div class="align-self-baseline" (click)="openDetails(jobs)">
+                      <mat-icon>visibility</mat-icon>
+                  </div>
+              </div>
+          </div>
+      </a>
+    </div>
+         <div class="custom-height d-flex justify-content-center">
+            <div class="alert alert-danger align-self-center" role="alert">
+                No Jobs Found...!
+              </div>
+         </div>
+      </div>
+</div>

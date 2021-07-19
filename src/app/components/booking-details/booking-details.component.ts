@@ -30,6 +30,8 @@ export class BookingDetailsComponent implements OnInit {
   isCouponApplied:boolean = false;
   taskTotal:number = 0;
   isFromAllBookings:boolean = false;
+  isUserDetails:boolean = false;
+  customerID:string = "";
   @Input() childID: string;
   @Output() closeEvent = new EventEmitter();
   constructor(private adminService:AdminService,private router:Router, private activatedRoute:ActivatedRoute,
@@ -40,7 +42,7 @@ export class BookingDetailsComponent implements OnInit {
     this.routeSub = this.activatedRoute.params.subscribe(params => {
       //log the entire params object
       this.id = params['id'];
-      this.getTaskDetails()
+      // this.getTaskDetails()
    }); 
   }
   ngOnChanges(changes: SimpleChanges){
@@ -64,6 +66,14 @@ export class BookingDetailsComponent implements OnInit {
     this.adminService.showLoader.next(true);
     this.router.navigate(['admin','customer',user]);
   }
+  userDetails(id){
+    this.adminService.showLoader.next(true);
+    this.isUserDetails = true;
+    this.customerID = id;
+     }
+     receiveMessage(event){
+      this.isUserDetails = event;
+     }
   getTaskDetails(){
     this.totalAmount = 0;
     this.taskTotal = 0;

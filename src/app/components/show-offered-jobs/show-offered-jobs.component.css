@@ -1,0 +1,13 @@
+::ng-deep .mat-dialog-container {
+    padding: 0 !important;
+  }
+  table {
+    border-collapse: separate;
+    border-spacing: 0 1em;
+}
+.custom-height{
+  overflow-y: auto;
+  max-height: 75vh;
+  min-height: 50vh;
+  scroll-behavior: smooth !important;
+}

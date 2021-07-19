@@ -16,11 +16,10 @@ export class AppComponent implements OnInit {
       if(this.loading !== flag) {
         this.loading = flag;
       }
-     
     })
   }
 ngOnInit(){
-  this.bnIdle.startWatching(60).subscribe((isTimedOut: boolean) => {
+  this.bnIdle.startWatching(60 * 60).subscribe((isTimedOut: boolean) => {
     if (isTimedOut) {
       if ( (this.router.url != '/login') ){
         sessionStorage.clear();

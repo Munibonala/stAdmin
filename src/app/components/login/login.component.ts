@@ -35,6 +35,11 @@ export class LoginComponent implements OnInit {
     this.adminService.adminLogin(this.loginForm.value).subscribe((posRes:any)=>{
       this.loading = false;
       if(posRes.response == 3){
+        if(posRes && posRes.adminType == "System administrator"){
+          sessionStorage.setItem('isMainAdmin','1')
+        }else{
+          sessionStorage.setItem('isMainAdmin','0')
+        }
         sessionStorage.setItem('token',posRes.access_token);
         this.router.navigate(['admin','allBookings'])
       }else{

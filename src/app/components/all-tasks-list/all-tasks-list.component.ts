@@ -29,7 +29,10 @@ debounceTime = null;
 isDetails:boolean = false;
 taskID:string = "";
 jobObj:any
-pageNumbers:Array<any> = []
+pageNumbers:Array<any> = [];
+searchByNameForm:FormGroup;
+isSearchByName:boolean = false;
+categoryList:Array<any> = [];
   @ViewChild('t',{static:false}) datePicker: NgbInputDatepicker;
   @ViewChild ("scroll",{static: false}) scrollContainer:ElementRef;
   @ViewChild(CdkVirtualScrollViewport, { static: false }) viewPort: CdkVirtualScrollViewport;
@@ -46,13 +49,21 @@ pageNumbers:Array<any> = []
     this.jobObj = {
       taskStatus : this.taskStatus,
       pageNo:""+this.pageNo,
-      size:"30",
-      State: "All"
+      size:"20",
+      State: "All",
+      category:"All"
     }
+    this.searchByNameForm = this.fb.group({
+      searchText:["",Validators.required],
+      pageNo:[""],
+      size:["21"]
+    })
     this.filterForm = this.fb.group({
       dateRange:[null,Validators.required]
     })
-    this.getJobs()
+    this.getJobs();
+    this.categoryList = JSON.parse(sessionStorage.getItem('Category'))
+    console.log(this.categoryList)
   }
   //message alerts showing
   openSnackBar(message: string, action: string) {
@@ -60,7 +71,59 @@ pageNumbers:Array<any> = []
       duration: 3000
     });
   }
-  
+  searchTaskByName(){
+    if(this.searchByNameForm.valid){
+      this.jobs = []
+      this.pageNo = 1;
+       this.isSearchByName = true;  
+      this.getTasksByName()
+    }else{
+     this.openSnackBar("Enter text..","") 
+    }
+  }
+  getTasksByName(){
+    this.pageNumbers = [];
+    this.dataMessage ="Fetching Data...";
+    let token = sessionStorage.getItem('token');
+    this.searchByNameForm.patchValue({
+      pageNo: ""+this.pageNo
+    })
+    this.adminService.showLoader.next(true);
+this.adminService.getTasksBySearch(this.searchByNameForm.value,token).subscribe((posRes)=>{
+  this.adminService.showLoader.next(false);
+if(posRes.response == 3){
+  this.jobs = posRes.FetchData;
+  this.jobsCopy = posRes.FetchData;
+  this.totalPageCount = posRes.pages;
+  for(let i:number = 0; i<this.totalPageCount; i++){
+    this.pageNumbers.push(i+1);
+  }
+  this.jobs.forEach((val,i)=>{
+    // this.jobs.taskDate = new Date(parseFloat(val.taskDate));
+    this.jobs[i].postedDate = new Date(val.postedDate * 1);
+    if(val.budget.budgetType.Total == false){
+      let num:number = parseInt(val.budget.Hours);
+      this.jobs[i].budget.budget = num * val.budget.pricePerHour;
+    }
+  })
+  this.filteredData = this.jobs
+}else{
+  this.openSnackBar(posRes.message,"");
+}
+},(err:HttpErrorResponse)=>{
+  this.dataMessage = "No Users Found.."
+  this.openSnackBar(err.message,"")
+  this.pageNo = this.pageNo -1;
+  this.isSearchByName = false;
+  this.adminService.showLoader.next(false);
+  if(err.error instanceof Error){
+    console.warn("Client SIde Error",err.error);
+  }else{
+    console.warn("Server Error",err.error);
+  }
+})
+
+  }
   onScrollEnd(){
     if(this.viewPort){
       this.viewPort.elementScrolled().subscribe(
@@ -169,7 +232,9 @@ pageNumbers:Array<any> = []
   }
   taskFilters(){
     let obj = {
-      from : "AllTasks"
+      from : "AllTasks",
+      filters: this.jobObj,
+      category:this.categoryList
     }
     this.pageNo = 1
    let dialogRef = this.dialog.open(FiltersComponent,{
@@ -234,16 +299,16 @@ pageNumbers:Array<any> = []
  
   getJobs(){
     this.pageNumbers = [];
+    this.isSearchByName = false;
     this.adminService.showLoader.next(true);
     this.dataMessage ="Fetching Data..."
    this.jobObj.pageNo = ""+ this.pageNo;
-    let token = sessionStorage.getItem('token')
+    let token = sessionStorage.getItem('token');
     this.adminService.getFilteredTasks(this.jobObj,token).subscribe((posRes:any)=>{
       this.dataMessage = "No Data Found"
       this.adminService.showLoader.next(false);
       console.log("results",posRes);
       if(posRes.response == 3){
-        
         this.jobs = posRes.jobsData;
         this.jobsCopy = posRes.jobsData;
         this.totalPageCount = posRes.pages;
@@ -277,15 +342,27 @@ pageNumbers:Array<any> = []
   }
   previousPage(){
     this.pageNo -= 1;
-    this.getJobs();
+    if(this.isSearchByName){
+      this.getTasksByName();
+    }else{
+      this.getJobs();
+    }
   }
   nextPage(){
     this.pageNo += 1;
-    this.getJobs();
+    if(this.isSearchByName){
+      this.getTasksByName();
+    }else{
+      this.getJobs();
+    }
   }
   gotoSelectedPage(number){
     this.pageNo = number;
-    this.getJobs();
+    if(this.isSearchByName){
+      this.getTasksByName();
+    }else{
+      this.getJobs()
+    }
   }
   showDate(event){
     console.log(event);   

@@ -50,7 +50,7 @@
             <ul class="list-unstyled mt-2">
                 <li class="d-flex ml-1">
                     <span>
-                        <img *ngIf="customer.profilePic != ''" src="{{baseUrl+customer.profilePic}}" loading="lazy" (click)="showUserDetails(customer)" width="55" height="55"  class="rounded-circle hover shadow">
+                        <img *ngIf="customer.profilePic != ''" src="{{baseUrl+customer.profilePic}}" loading="lazy" alt="user Pic" (click)="showUserDetails(customer)" width="55" height="55"  class="rounded-circle hover shadow">
                     </span>
                     <span class=" pl-2 align-self-center">
                         <b style="font-size: 14px;">{{customer.firstName}} {{customer.lastName}}</b><br>

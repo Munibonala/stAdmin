@@ -23,7 +23,6 @@ export class CommentsDailogComponent implements OnInit {
 
   ngOnInit() {
     this.baseUrl =this.adminService.baseUrl;
-    console.log(this.data);
     this.comments = this.data.offers;
     this.postID = this.data.postID;
   }

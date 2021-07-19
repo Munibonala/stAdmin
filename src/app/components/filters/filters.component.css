@@ -18,3 +18,43 @@ input:focus{
   .example-full-width{
     width: 100% !important;
 }
+.refresh-container{
+  min-width: 4rem;
+}
+.sti_container {
+  position: relative;
+}
+
+.btn {
+  position: relative;
+  padding: 5px;
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+  border: 0;
+  vertical-align: middle;
+  text-decoration: none;
+  color: #Fa0e0e;
+  border-radius: 10%;
+  -webkit-transition: width 0.1s;
+  transition: width 0.1s;
+}
+
+.btn .btn-text {
+  max-width: 0;
+  display: inline-block;
+  margin-left: 0.1rem;
+  -webkit-transition: color .25s 0.5s, max-width 0.25s;
+  transition: color .25s 1.5s, max-width 0.25s;
+  vertical-align: top;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #fa0e0e;
+}
+.btn:hover{
+  border-radius: 12px;
+}
+.btn:hover .btn-text {
+  max-width: 3rem;
+  
+}

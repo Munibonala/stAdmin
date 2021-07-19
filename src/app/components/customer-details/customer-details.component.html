@@ -16,9 +16,10 @@
                <p class="mb-o f-14">
                    <span>{{UserDetails.address}}</span>
                </p>
-               <p class="mb-o f-14">
-                <button mat-raised-button *ngIf="!isUserBlocked" class="btn-bg rounded-pill small" (click)="blockOrUnBlock()">Block User</button>
-                <button mat-raised-button *ngIf="isUserBlocked" class="btn-bg rounded-pill small" (click)="blockOrUnBlock()">UnBlock User</button>
+               <p class="mb-o f-14 d-flex justify-content-around">
+                <button mat-raised-button *ngIf="!isUserBlocked" class="btn-bg rounded-pill small mr-2" (click)="blockOrUnBlock()">Block User</button>
+                <button mat-raised-button *ngIf="isUserBlocked" class="btn-bg rounded-pill small mr-2" (click)="blockOrUnBlock()">UnBlock User</button>
+                <button mat-raised-button  class="btn-bg rounded-pill small" (click)="fetchUserOfferedJobs()">Show Hired Jobs</button>
             </p>
            </div>
         </div>

@@ -28,6 +28,8 @@ export class TaskDetailsComponent implements OnInit ,OnChanges {
   offers:Array<any> = [];
   assigned:Array<any> = [];
   couponObj:any ;
+  isUserDetails:boolean = false;
+  customerID:string = "";
   @Input() childID: string;
   @Output() closeEvent = new EventEmitter();
   isFromAllTask:boolean = false;
@@ -139,6 +141,14 @@ this.adminService.getUserDetails(obj).subscribe((posRes)=>{
   }
 },(err:HttpErrorResponse)=>{})
   }
+  userDetails(id){
+    this.adminService.showLoader.next(true);
+    this.isUserDetails = true;
+    this.customerID = id;
+     }
+     receiveMessage(event){
+      this.isUserDetails = event;
+     }
   openPrivateChat(offer){
     console.log(offer.authorMessages);
     let obj = {

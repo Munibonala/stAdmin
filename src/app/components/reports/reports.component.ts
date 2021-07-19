@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { AdminService } from 'src/app/admin.service';
 
@@ -17,6 +18,7 @@ reportsForm1:FormGroup;
 providerForm:FormGroup;
 bookingsForm:FormGroup;
 referralForm:FormGroup;
+bankDetailsForm:FormGroup;
 dateRange:any;
 fileName:string = "";
 bsInlineValue = new Date();
@@ -30,14 +32,19 @@ taskStatus:string = "All"
   stateName:string = "All"
   @ViewChild('t',{static:false}) datePicker: NgbInputDatepicker;
   hoveredDate: NgbDate | null = null;
-
   fromDate: NgbDate | null;
   toDate: NgbDate | null;
   constructor(private adminService:AdminService, private  dialog:MatDialog,
     private fb:FormBuilder, private snackBar:MatSnackBar,private calendar: NgbCalendar, 
-    public formatter: NgbDateParserFormatter, private sanitizer: DomSanitizer) { }
+    public formatter: NgbDateParserFormatter, private sanitizer: DomSanitizer, private router:Router) { }
 
   ngOnInit() {
+    let adminType = sessionStorage.getItem('isMainAdmin');
+    
+    if(adminType == "0"){
+      this.openSnackBar("Your not a System administrator to access this page","");
+      this.router.navigateByUrl('/admin/allBookings');
+    }
     this.maxDate.setDate(this.maxDate.getDate() + 7);
     this.bsInlineRangeValue = [this.bsInlineValue, this.maxDate];
     this.reportsForm1 = this.fb.group({
@@ -47,6 +54,9 @@ taskStatus:string = "All"
       dateRange:["",Validators.required]
     })
     this.bookingsForm = this.fb.group({
+      dateRange:["",Validators.required]
+    })
+    this.bankDetailsForm = this.fb.group({
       dateRange:["",Validators.required]
     })
     this.referralForm = this.fb.group({
@@ -163,5 +173,19 @@ getReports(obj){
     }
   })
 }
-
+getBankDetails(){
+  let frmDate = new Date(this.bankDetailsForm.value.dateRange[0]).getTime();
+  let toDate = new Date(this.bankDetailsForm.value.dateRange[1]).getTime();
+  frmDate = new Date(this.bankDetailsForm.value.dateRange[0]).setHours(0,0,0,0);
+  toDate = new Date(this.bankDetailsForm.value.dateRange[1]).setHours(23,59,59,999);
+  let obj = {
+    reportType:"Bookings-Details",
+    reportStatus:"All",
+    fromDate:""+ frmDate,
+    toDate:""+ toDate,
+    State: "All"
+  }
+  this.fileName = "booking-details.csv";
+  this.getReports(obj)
+}
 }

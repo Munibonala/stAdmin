@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } fr
 import { Router } from '@angular/router';
 import { AdminService } from 'src/app/admin.service';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { FiltersComponent } from '../filters/filters.component';
 
@@ -22,11 +22,14 @@ export class AllBookingsComponent implements OnInit {
   apiStatus:string = "Fetching Bookings"
   totalPageCount:number = 0;
   filterForm:FormGroup;
+  searchByNameForm:FormGroup;
 debounceTime = null;
 bookingID:string = "";
 isDetailsPage:boolean = false;
 taskStatus:string = "All";
 pageNumbers:Array<any> = [];
+category:Array<any> = [];
+isSearchByName:boolean = false;
 @ViewChild(CdkVirtualScrollViewport, { static: false }) viewPort: CdkVirtualScrollViewport;
   constructor(private adminService:AdminService,private router:Router,private fb:FormBuilder,
     private  cd: ChangeDetectorRef, private snackBar:MatSnackBar, private dialog:MatDialog) { }
@@ -36,14 +39,21 @@ pageNumbers:Array<any> = [];
       "type":this.taskStatus,
       "pageNo":""+ this.pageNo,
       "size":"20",
-      State:"All"
-     }
+      State:"All",
+      category: "All"
+     };
+     this.searchByNameForm = this.fb.group({
+      searchText:["",Validators.required],
+      pageNo:[""],
+      size:["21"]
+    })
      this.filterForm = this.fb.group({
        dateRange: [null]
      })
     this.adminService.showLoader.next(true);
     this.baseUrl = this.adminService.baseUrl;
-    this.getJobs()
+    this.getJobs();
+    this.browseCategory();
   }
   getColors(status){
     switch (status){
@@ -53,8 +63,74 @@ pageNumbers:Array<any> = [];
         
     }
   }
+  // Browse Category
+browseCategory(){
+  this.adminService.browseCategory().subscribe((posRes)=>{
+    if(posRes.response == 3){
+      this.category = posRes.categoriesList; 
+      sessionStorage.setItem('Category',JSON.stringify(this.category));
+    }else{
+      this.openSnackBar(posRes.message,"")
+    }
+  },(err:HttpErrorResponse)=>{
+    if(err.error instanceof Error){
+      console.warn("CSE",err.message);
+    }else{
+      console.warn("SSE",err.message);
+      
+    }
+  })
+}
   receiveMessage(event){
     this.isDetailsPage = false;
+  }
+  searchBookingByName(){
+    if(this.searchByNameForm.valid){
+      this.jobs = []
+      this.pageNo = 1;
+       this.isSearchByName = true;  
+      this.getBookingsByName()
+    }else{
+     this.openSnackBar("Enter text..","") 
+    }
+  }
+  getBookingsByName(){
+    this.pageNumbers = [];
+    let token = sessionStorage.getItem('token');
+    this.searchByNameForm.patchValue({
+      pageNo: ""+this.pageNo
+    })
+    this.adminService.showLoader.next(true);
+this.adminService.getBookingsBySearch(this.searchByNameForm.value,token).subscribe((posRes)=>{
+  
+  this.adminService.showLoader.next(false);
+if(posRes.response == 3){
+  this.jobs = posRes.FetchData;
+  this.totalPageCount = posRes.pages;
+  for(let i:number = 0; i<this.totalPageCount; i++){
+    this.pageNumbers.push(i+1);
+  }
+  this.jobs.forEach((val,i)=>{
+    // this.jobs.taskDate = new Date(parseFloat(val.taskDate));
+    this.jobs[i].postedDate = new Date(val.postedDate * 1);
+  })
+  this.filteredData = this.jobs;
+}else{
+  this.openSnackBar(posRes.message,"");
+}
+},(err:HttpErrorResponse)=>{
+
+  this.openSnackBar(err.message,"")
+  this.pageNo = this.pageNo -1;
+  this.isSearchByName = false;
+  this.adminService.showLoader.next(false);
+  if(err.error instanceof Error){
+    console.warn("Client SIde Error",err.error);
+  }else{
+    console.warn("Server Error",err.error);
+  }
+})
+
   }
   tasksFilter(type){
     this.taskStatus = type;
@@ -93,6 +169,7 @@ pageNumbers:Array<any> = [];
   getJobs(){
     this.pageNumbers = []
     this.jobObj.pageNo = ""+this.pageNo
+    this.isSearchByName = false;
 let token = sessionStorage.getItem('token');
 this.adminService.showLoader.next(true);
     this.adminService.fetchAllbookings(this.jobObj,token).subscribe((posRes)=>{
@@ -129,15 +206,27 @@ this.adminService.showLoader.next(true);
   }
   previousPage(){
     this.pageNo -= 1;
-    this.getJobs();
+    if(this.isSearchByName){
+      this.getBookingsByName();
+    }else{
+      this.getJobs()
+    }
   }
   nextPage(){
     this.pageNo += 1;
-    this.getJobs();
+    if(this.isSearchByName){
+      this.getBookingsByName();
+    }else{
+      this.getJobs()
+    }
   }
   gotoSelectedPage(number){
     this.pageNo = number;
-    this.getJobs()
+    if(this.isSearchByName){
+      this.getBookingsByName();
+    }else{
+      this.getJobs()
+    }
   }
   // Vertual Scroll pagination
   onScrollEnd(){
@@ -168,7 +257,9 @@ this.adminService.showLoader.next(true);
   }
   bookingFilters(){
     let obj = {
-      from : "AllBookings"
+      from : "AllBookings",
+      category: this.category,
+      filters:this.jobObj
     }
     this.pageNo = 1
    let dialogRef = this.dialog.open(FiltersComponent,{

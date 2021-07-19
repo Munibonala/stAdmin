@@ -15,6 +15,9 @@ border-left: none;
   height: 32px !important;
 }
 /* Bootstrap 4 text input with search icon */
+.example-form {
+  flex: 1;
+}
 .has-search .form-control {
     padding-left: 2.375rem;
   }

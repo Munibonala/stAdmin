@@ -22,10 +22,14 @@ export class DashboardComponent implements OnInit {
   categorystatus:any = {
     getTypeFilter: "thisYear"
   };
+  locationStatus:any = {
+    getTypeFilter: "thisYear"
+  }
   bookingsForm:FormGroup;
   label:any;
   isBookingDateRange:boolean = false;
   postOverViewForm:FormGroup;
+  locationWiseForm:FormGroup;
   bookingData:any ;
   isLocationBase:boolean = false;
   maxDate:any = new Date();
@@ -132,6 +136,9 @@ public barChartColors: Color[] = [
       dateRange:["",Validators.required]
     })
     this.postOverViewForm = this.fb.group({
+      dateRange:["",Validators.required]
+    })
+    this.locationWiseForm = this.fb.group({
       dateRange:["",Validators.required]
     })
     this.getStatuses()
@@ -403,27 +410,122 @@ changeView(event){
     this.isLocationBase = false;
   }
 }
+getThisWeekLocationWisePosts(){
+  this.locationStatus.getTypeFilter = "thisWeek";
+  this.getLocationBasedChart();
+}
+getThisYearLocationWisePosts(){
+  this.locationStatus.getTypeFilter = "thisYear";
+  this.getLocationBasedChart();
+}
+getThisMonthLocationWisePosts(){
+  this.locationStatus.getTypeFilter = "thisMonth";
+  this.getLocationBasedChart();
+}
+getLocationChartByRange(){
+  let  frmDate = new Date(this.locationWiseForm.value.dateRange[0]).setHours(1,0,0,0);
+  let  toDate = new Date(this.locationWiseForm.value.dateRange[1]).setHours(23,59,59,999);
+this.label = new Date(frmDate).toLocaleDateString()+"to"+new Date(toDate).toLocaleDateString();
+console.log("From Date",frmDate);
+
+      // frmDate = new Date(new Date(frmDate).toLocaleDateString()).getTime() + 100;
+      // toDate = new Date(new Date(toDate).toLocaleDateString()).getTime() + 86399900;
+    this.locationStatus = {
+      getTypeFilter :  JSON.stringify([frmDate,toDate])
+    }
+    this.getLocationBasedChart()
+}
 getLocationBasedChart(){
   this.adminService.showLoader.next(true);
   let token = sessionStorage.getItem('token');
   let obj = {
-    "getTypeFilter":"states"
+    "getTypeFilter":"thisYear"
   }
-  this.adminService.fetchlocationBasedTasks(obj,token).subscribe((posRes)=>{
+  this.adminService.fetchlocationBasedTasks(this.locationStatus,token).subscribe((posRes)=>{
     console.log("Location Based",posRes);
     this.adminService.showLoader.next(false);
     if(posRes.response == 3){
-      let valuesArray = [];
+//       let valuesArray = [];
+// this.barChartLabelsLocation = Object.keys(posRes.result[0].data)
+//       posRes.result.forEach(val=>{
+//         let arr = []
+//         let obj = {label:"",data:[]}
+//      obj.label =  val.label;
+//     obj.data =  Object.values(val.data);
+//     arr.push(obj);
+//     valuesArray.push(arr)
+//       });
+// Loop Start Here
+let array = [];
 this.barChartLabelsLocation = Object.keys(posRes.result[0].data)
-      posRes.result.forEach(val=>{
-        let arr = []
-        let obj = {label:"",data:[]}
-     obj.label =  val.label;
-    obj.data =  Object.values(val.data);
-    arr.push(obj);
-    valuesArray.push(arr)
-      });
-      this.barChartDataLocation = valuesArray;
+posRes.result.forEach(val=>{
+  let arr = []
+  let obj = {label:"",data:[]}
+if(this.locationStatus.getTypeFilter == "thisYear"){
+    switch(val.label) { 
+    case 1: { 
+      obj.label =  "Jan";
+       break; 
+    } 
+    case 2: {  
+       obj.label =  "Feb";
+       break; 
+    }
+    case 3: { 
+      obj.label =  "Mar";
+       break; 
+    } 
+    case 4: {  
+       obj.label =  "Aprl";
+       break; 
+    }
+    case 5: { 
+      obj.label =  "May";
+       break; 
+    } 
+    case 6: {  
+       obj.label =  "Jun";
+       break; 
+    }
+    case 7: { 
+      obj.label =  "July";
+       break; 
+    } 
+    case 8: {  
+       obj.label =  "Aug";
+       break; 
+    }
+    case 9: { 
+      obj.label =  "Sep";
+       break; 
+    } 
+    case 10: {  
+       obj.label =  "Oct";
+       break; 
+    }
+    case 11: { 
+      obj.label =  "Nov";
+       break; 
+    } 
+    case 12: {  
+       obj.label =  "Dec";
+       break; 
+    }
+    default: { 
+      obj.label =  val.label;
+       break; 
+    } 
+ }
+}else{
+obj.label =  val.label;
+}
+
+obj.data =  Object.values(val.data);
+arr.push(obj);
+array.push(arr)
+});
+// Loop ENd Here
+      this.barChartDataLocation = array;
       console.log("Location data", this.barChartDataLocation);
       console.log("COmplex",this.barChartLabelsLocation);
       

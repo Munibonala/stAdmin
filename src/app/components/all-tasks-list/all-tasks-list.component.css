@@ -22,6 +22,9 @@ label{
 .example-full-width{
     width: 20% !important;
 }
+.example-form{
+  flex: 1;
+}
  .mat-form-field-underline {
     display: none;
 }

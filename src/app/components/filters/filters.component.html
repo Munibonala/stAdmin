@@ -1,5 +1,13 @@
 <div class="text-center bg-light p-3">
-    <h5 class="">
+    <h5 class="d-flex justify-content-between">
+      <div class="refresh-container">
+        <div class="sti_container">
+          <button class="btn" (click)="reset()">
+            <span class="btn-icon"><i class="fas fa-redo"></i></span>
+            <span class="btn-text f-14">Reset</span>
+          </button>
+        </div>
+      </div>
         {{headings}} <span class="float-right hover text-right" (click)="closeTab()">
             <img width="40" style="border-radius: 50%; padding: 10px;" src="../../../assets/cancel.png">
         </span></h5>
@@ -61,7 +69,7 @@
     </a>
     </mat-menu>
     <mat-menu #Catmenu="matMenu" class="mobile-menu" [overlapTrigger]="false">
-      <a mat-menu-item  *ngFor="let cat of data.cat; let i = index;" (click)="selectCat(cat.categoryName)" class="text-decoration-none header-text" >
+      <a mat-menu-item  *ngFor="let cat of categoryList; let i = index;" (click)="selectCat(cat.categoryName)" class="text-decoration-none header-text" >
           {{cat.categoryName}}
     </a>
     </mat-menu>
@@ -101,6 +109,18 @@
        
  <input type="text" class="form-control bg-white f-14" readonly [value]="state">
 </div>
+<label class="f-14">Select Category</label>
+<div class="position-relative mb-4 hover" [matMenuTriggerFor]="taskCatmenu">
+ <span class="position-absolute hover"   style="top: 0;right: 0;margin-top: 0.6rem;margin-right: 5px;">
+     <img src="../../../assets/sort.png" width="10">
+     </span>
+<input type="text" class="form-control bg-white f-14" readonly [value]="category">
+</div>
+<mat-menu #taskCatmenu="matMenu" class="mobile-menu" [overlapTrigger]="false">
+  <a mat-menu-item  *ngFor="let cat of categoryList; let i = index;" (click)="selectCat(cat.categoryName)" class="text-decoration-none header-text" >
+      {{cat.categoryName}}
+</a>
+</mat-menu>
     <div class="input-group mb-4">
       <input type="text" class="form-control" [maxDate]="maxDate" bsDaterangepicker formControlName="dateRange"
        placeholder="Select date range" [bsConfig]="{ adaptivePosition: true }"  #drp2="bsDaterangepicker">
@@ -159,6 +179,18 @@ EXPIRED
        
  <input type="text" class="form-control bg-white f-14" readonly [value]="state">
 </div>
+<label class="f-14">Select Category</label>
+<div class="position-relative mb-4 hover" [matMenuTriggerFor]="servicesCatmenu">
+ <span class="position-absolute hover"   style="top: 0;right: 0;margin-top: 0.6rem;margin-right: 5px;">
+     <img src="../../../assets/sort.png" width="10">
+     </span>
+<input type="text" class="form-control bg-white f-14" readonly [value]="category">
+</div>
+<mat-menu #servicesCatmenu="matMenu" class="mobile-menu" [overlapTrigger]="false">
+  <a mat-menu-item  *ngFor="let cat of categoryList; let i = index;" (click)="selectMainCat(cat.categoryName)" class="text-decoration-none header-text" >
+      {{cat.categoryName}}
+</a>
+</mat-menu>
     <div class="input-group mb-4">
       <input type="text" class="form-control" [maxDate]="maxDate" bsDaterangepicker formControlName="dateRange"
        placeholder="Select date range" [bsConfig]="{ adaptivePosition: true }"  #drp2="bsDaterangepicker">

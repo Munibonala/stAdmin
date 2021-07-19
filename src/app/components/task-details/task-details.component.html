@@ -1,10 +1,10 @@
-<div class="p-3 shadow">
+<div class="p-3 shadow" *ngIf="!isUserDetails">
     <div class="position-absolute hover" *ngIf="isFromAllTask" style="top: 0;left: 0;" (click)="closeDetails()">
         <img src="../../../assets/criss_cross.png" width="24">
     </div>
     <h4 class="pt-1">Details </h4>
 </div>
-<div class="container mt-3 scroll" style="max-height: 80vh; overflow-y: auto;" *ngIf="rawData && rawData.postTitle ">
+<div class="container mt-3 scroll" style="max-height: 80vh; overflow-y: auto;" *ngIf="rawData && rawData.postTitle && !isUserDetails">
     <div class="row scroll">
         <div class="col-md-6 mb-2" style=" border-radius: 12px;">
             <p class=" text-muted pb-0 mb-0" *ngIf="rawData && rawData.postTitle"
@@ -17,7 +17,7 @@
                         <div class="col-md-8">
                             <ul class="list-unstyled ">
                                 <li class="d-flex">
-                                    <span>
+                                    <span (click)="userDetails(rawData.userID)">
                                         <img src="{{image}}" width="70" height="70"  class="rounded-circle  shadow">
                                     </span>
                                     <span class=" align-self-center">
@@ -116,7 +116,7 @@
                 <div class="col-md-6 p-0" *ngFor="let offer of assigned">
                     <ul class="list-unstyled ">
                         <li class="d-flex">
-                            <span>
+                            <span (click)="userDetails(offer.offeredUserID)">
                                 <img src="{{baseUrl+offer.authorProfilePic}}" width="70" height="70"  class="rounded-circle  shadow">
                             </span>
                             <span class=" align-self-center">
@@ -134,7 +134,7 @@
                 <div class="col-md-6 p-0" *ngFor="let offer of offers; let i = index;">
                     <ul class="list-unstyled " >
                         <li class="d-flex">
-                            <span class="position-relative">
+                            <span class="position-relative" (click)="userDetails(offer.offeredUserID)">
                                 <img src="{{baseUrl+offer.authorProfilePic}}" width="70" height="70"  class="rounded-circle  shadow">
                                 <div class="delete-icon hover" (click)="deleteOffers(offer,i)">
                                     <img src="../../../assets/criss_cross.png" width="20"  matTooltip="Delete Offer">
@@ -157,4 +157,7 @@
             </div>
         </div>
     </div>
+</div>
+<div *ngIf="isUserDetails">
+    <app-customer-details [childID]="customerID" (closeEvent)="receiveMessage($event)"></app-customer-details>
 </div>

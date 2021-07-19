@@ -184,37 +184,37 @@
     <div class="row bg-light mt-2" *ngIf="barChartLabelsLocation && barChartLabelsLocation.length && barChartDataLocation && barChartDataLocation.length && isLocationBase">
       <div class="col-md-12 p-2">
           <h4 class="font-weight-bold">Location Base Over View</h4>
-          <!-- <div class="d-flex justify-content-between">
+          <div class="d-flex justify-content-between">
               <nav class="navbar navbar-expand-lg navbar-light">
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
-                      <li class="nav-item"  (click)="getThisWeekPosts()">
-                        <a class="nav-link rounded-pill small f-14" [ngClass]="{'active': categorystatus.getTypeFilter == 'thisWeek'}">This Week</a>
+                      <li class="nav-item"  (click)="getThisWeekLocationWisePosts()">
+                        <a class="nav-link rounded-pill small f-14" [ngClass]="{'active': locationStatus.getTypeFilter == 'thisWeek'}">This Week</a>
                       </li>
-                      <li class="nav-item"  (click)="getThisMonthPosts()">
-                        <a class="nav-link small rounded-pill f-14" [ngClass]="{'active': categorystatus.getTypeFilter == 'thisMonth'}">This Month</a>
+                      <li class="nav-item"  (click)="getThisMonthLocationWisePosts()">
+                        <a class="nav-link small rounded-pill f-14" [ngClass]="{'active': locationStatus.getTypeFilter == 'thisMonth'}">This Month</a>
                       </li>
-                      <li class="nav-item"  (click)="getThisYearPosts()">
-                          <a class="nav-link  small rounded-pill f-14" [ngClass]="{'active': categorystatus.getTypeFilter == 'thisYear'}">This Year</a>
+                      <li class="nav-item"  (click)="getThisYearLocationWisePosts()">
+                          <a class="nav-link  small rounded-pill f-14" [ngClass]="{'active': locationStatus.getTypeFilter == 'thisYear'}">This Year</a>
                         </li>
                     </ul>
                   </div>
                 </nav>
-                <form class="form-inline mr-5" [formGroup]="postOverViewForm">
+                <form class="form-inline mr-5" [formGroup]="locationWiseForm">
                   <div class="input-group">
                      <input type="text" class="form-control bg-white" [maxDate]="maxDate" bsDaterangepicker readonly formControlName="dateRange"
-                      placeholder="Select date range" [bsConfig]="{ adaptivePosition: true,showWeekNumbers:false }"  #drp2="bsDaterangepicker">
+                      placeholder="Select date range" [bsConfig]="{ adaptivePosition: true,showWeekNumbers:false }"  #drp3="bsDaterangepicker">
                      <div class="input-group-append">
-                       <span class="input-group-text hover" id="basic-addon2" (click)="drp2.toggle()">
+                       <span class="input-group-text hover" id="basic-addon2" (click)="drp3.toggle()">
                            <i class="fas fa-calendar-alt fa-fw"></i>
                        </span>
                      </div>
                    </div>
                            <div class=" ml-3">
-                             <button mat-raised-button (click)="getPostsByRange()"  [disabled]="!postOverViewForm.valid" class="btn-bg rounded-pill small">Filter</button>
+                             <button mat-raised-button (click)="getLocationChartByRange()"  [disabled]="!locationWiseForm.valid" class="btn-bg rounded-pill small">Filter</button>
                            </div>
                      </form>
-          </div> -->
+          </div>
       </div>
   </div>
   <div class="row my-3 mx-2" *ngIf="isLocationBase && barChartLabelsLocation && barChartLabelsLocation.length && barChartDataLocation && barChartDataLocation.length">

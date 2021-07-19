@@ -10,6 +10,7 @@ import { AdminService } from 'src/app/admin.service';
 export class AdminComponent implements OnInit {
   isdetailsPage:boolean = false;
   isSideNavOpen:boolean = false;
+  isMainAdmin:boolean = false;
   constructor(private adminService:AdminService, private router:Router) {
     
    }
@@ -18,7 +19,10 @@ export class AdminComponent implements OnInit {
     if(token == null){
       console.log("Token",token);
      this.router.navigateByUrl('/login');
-    }
+    };
+    let adminType = sessionStorage.getItem('isMainAdmin')
+    debugger;
+    this.isMainAdmin = adminType == "1"? true : false;
   }
   logOut(){
     sessionStorage.clear();

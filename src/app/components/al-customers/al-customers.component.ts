@@ -39,7 +39,7 @@ currentPage:number = 0;
 pageNumbers:Array<any> = [];
 categoryList:Array<any> = [];
 @ViewChild(CdkVirtualScrollViewport, { static: false }) viewPort: CdkVirtualScrollViewport;
-image:string = "https://stagingapi.startasker.com//images/Customers/NYlLT1600410727105JPEG_20200918_143028_1044443140.jpg"
+image:string = "https://stagingapi.startasker.com/images/Customers/NYlLT1600410727105JPEG_20200918_143028_1044443140.jpg"
   constructor(private adminService:AdminService, private router:Router, private fb:FormBuilder,
     private snackBar:MatSnackBar, private activatedRoute: ActivatedRoute,private dialog:MatDialog) { }
 
@@ -89,7 +89,7 @@ browseCategory(){
   this.adminService.browseCategory().subscribe((posRes)=>{
     if(posRes.response == 3){
       this.categoryList = posRes.categoriesList;
-      sessionStorage.setItem('categories',JSON.stringify(this.categoryList))
+      sessionStorage.setItem('categories',JSON.stringify(this.categoryList));
     }else{
       this.openSnackBar(posRes.message,"")
     }
@@ -200,7 +200,8 @@ this.isFetchingUsers = false;
   taskFilters(){
     let obj = {
       from : "AllCust",
-      cat: this.categoryList
+      category: this.categoryList,
+      filters:this.customerObj
     }
     this.pageNo = 1;
    let dialogRef = this.dialog.open(FiltersComponent,{

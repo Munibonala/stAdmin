@@ -1,11 +1,11 @@
 <div class="container-fluid" *ngIf="!isDetailsPage">
 <div class="row">
     <div class="col-md-12 d-flex justify-content-between p-3">
-        <h4 class="align-self-center">All Bookings</h4>
-        <form class="example-form align-self-center" >
+        <h4 class="align-self-center" style="flex: 1;">All Bookings</h4>
+        <form class="example-form align-self-center" [formGroup]="searchByNameForm" (ngSubmit)="searchBookingByName()" >
             <div class="form-group has-search">
               <i class="fa fa-search fa-2x form-control-feedback"></i>
-              <input type="search" class="form-control search-services" (keyup)="applyFilter($event.target.value)"  placeholder="Search by name">
+              <input type="search" class="form-control search-services" formControlName="searchText"  placeholder="Search by name">
             </div>
             
           </form>
@@ -113,7 +113,7 @@
                                     <span>
                                         <img src="../../../assets/clock.png" width="13">
                                     </span>
-                                    <span class="pl-2">
+                                    <span class="pl-2" *ngIf="jobs?.convenientTimings">
                                         <small *ngIf="jobs.convenientTimings.length == 0 || jobs.convenientTimings.length == 4">Any Time </small>
                                         <span style="margin: 0 !important;" *ngIf="jobs && jobs.convenientTimings.length && jobs.convenientTimings.length <= 3">
                                             <small *ngFor="let timings of jobs.convenientTimings">{{timings}}, </small>

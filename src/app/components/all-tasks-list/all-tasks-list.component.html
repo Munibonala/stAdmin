@@ -1,11 +1,11 @@
 <div class="container-fluid " *ngIf="!isDetails">
     <div class="row mb-2">
         <div class="col-md-12 d-flex bg-white justify-content-between p-2">
-            <h4 >Tasks List </h4>
-            <form class="example-form " >
+            <h4 style="flex: 1;">Tasks List </h4>
+            <form class="example-form " [formGroup]="searchByNameForm" (ngSubmit)="searchTaskByName()" >
                 <div class="form-group has-search">
                   <i class="fa fa-search fa-2x form-control-feedback"></i>
-                  <input type="search" class="form-control search-services" (keyup)="applyFilter($event.target.value)"  placeholder="Search by name">
+                  <input type="search" class="form-control search-services" formControlName="searchText"  placeholder="Search by name">
                 </div>
                 
               </form>
@@ -41,8 +41,8 @@
                 <a class="list-group-item hover   list-group-item-action"
                 *ngFor="let jobs of filteredData ; let i = index; last as isLast" [ngClass]="{'mb-5': isLast}" >
                 <div class="d-flex  px-2 justify-content-start" style="font-size: 14px; font-weight: 500;">
-                    <div class=" px-3">
-                        <img *ngIf="jobs.userInfo.profilePic != ''" src="{{'https://stagingapi.startasker.com/'+jobs.userInfo.profilePic}}" width="60" height="60" style="border-radius: 50%;">
+                    <div class=" px-3" *ngIf="jobs && jobs.userInfo">
+                        <img *ngIf="jobs.userInfo.profilePic != ''" src="{{'https://stagingapi.startasker.com/'+jobs.userInfo.profilePic}}" loading="lazy" width="60" height="60" style="border-radius: 50%;">
                     </div>
                     <div class=" pl-1 flex-fill">
                         <div class="my-1 d-flex" style="font-weight: 600;">
